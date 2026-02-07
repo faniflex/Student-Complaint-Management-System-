@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AASTU Complaint System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for Dashboard Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1A56DB;
+            --secondary-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-yellow: #F59E0B;
+            --accent-purple: #8B5CF6;
+            --dark-gray: #1F2937;
+            --medium-gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --lighter-gray: #F9FAFB;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--lighter-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background: var(--white);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(0);
+            transition: var(--transition);
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 8px 16px rgba(26, 86, 219, 0.2);
+        }
+
+        .logo-text {
+            flex: 1;
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: 4px;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 24px 0;
+            overflow-y: auto;
+        }
+
+        .nav-group {
+            margin-bottom: 24px;
+        }
+
+        .nav-group-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--medium-gray);
+            padding: 0 24px 12px;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 24px;
+            color: var(--medium-gray);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(26, 86, 219, 0.05);
+            color: var(--primary-blue);
+            padding-left: 32px;
+        }
+
+        .nav-item.active {
+            background: rgba(26, 86, 219, 0.1);
+            color: var(--primary-blue);
+            border-left-color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 24px;
+            margin-right: 12px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .nav-text {
+            flex: 1;
+        }
+
+        .nav-badge {
+            background: var(--accent-red);
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        .sidebar-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(26, 86, 219, 0.2);
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--medium-gray);
+            background: var(--light-gray);
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--medium-gray);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            background: var(--light-gray);
+            color: var(--accent-red);
+            transform: rotate(15deg);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--white);
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding: 12px 16px 12px 48px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            width: 300px;
+            font-size: 14px;
+            transition: var(--transition);
+            background: var(--lighter-gray);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+            width: 400px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+            font-size: 18px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--dark-gray);
+            border: 2px solid var(--light-gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--medium-gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .notification-btn:hover {
+            background: var(--light-gray);
+            color: var(--primary-blue);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent-red);
+            color: white;
+            font-size: 11px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            animation: pulse 2s infinite;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 32px;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            color: white;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .welcome-text h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .welcome-text p {
+            font-size: 16px;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .banner-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary-blue);
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            color: var(--medium-gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .icon-new { background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue)); }
+        .icon-active { background: linear-gradient(135deg, var(--accent-yellow), #FBBF24); }
+        .icon-pending { background: linear-gradient(135deg, var(--accent-red), #F87171); }
+        .icon-resolved { background: linear-gradient(135deg, var(--accent-green), #34D399); }
+
+        .stat-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            line-height: 1;
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .trend-up { color: var(--accent-green); }
+        .trend-down { color: var(--accent-red); }
+
+        .stat-detail {
+            font-size: 12px;
+            color: var(--medium-gray);
+            margin-top: 8px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .action-card {
+            background: var(--lighter-gray);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .action-card:hover {
+            background: white;
+            border-color: var(--primary-blue);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin: 0 auto 16px;
+        }
+
+        .action-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--dark-gray);
+        }
+
+        .action-desc {
+            font-size: 14px;
+            color: var(--medium-gray);
+        }
+
+        /* Recent Complaints */
+        .recent-complaints {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--light-gray);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            background: var(--lighter-gray);
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: var(--lighter-gray);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .status-new { background: rgba(26, 86, 219, 0.1); color: var(--primary-blue); }
+        .status-in-review { background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow); }
+        .status-resolved { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+        .status-closed { background: rgba(107, 114, 128, 0.1); color: var(--medium-gray); }
+
+        .priority-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .priority-high { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+        .priority-medium { background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow); }
+        .priority-low { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+
+        .action-buttons-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        /* Calendar Widget */
+        .calendar-widget {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-top: 32px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .calendar-nav-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--light-gray);
+            background: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .calendar-nav-btn:hover {
+            background: var(--light-gray);
+            border-color: var(--primary-blue);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            color: var(--medium-gray);
+            font-weight: 600;
+        }
+
+        .calendar-date {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-date:hover {
+            background: var(--light-gray);
+        }
+
+        .calendar-date.today {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            font-weight: 700;
+        }
+
+        .calendar-date.has-event {
+            position: relative;
+        }
+
+        .calendar-date.has-event::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--accent-red);
+            border-radius: 50%;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(26, 86, 219, 0.3);
+            transition: var(--transition);
+            z-index: 100;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 15px 35px rgba(26, 86, 219, 0.4);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--medium-gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--light-gray);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .search-input {
+                width: 200px;
+            }
+            
+            .search-input:focus {
+                width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 16px;
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .search-box {
+                order: 3;
+                width: 100%;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .search-input:focus {
+                width: 100%;
+            }
+            
+            .content {
+                padding: 16px;
+            }
+            
+            .welcome-banner {
+                padding: 24px;
+            }
+            
+            .welcome-text h2 {
+                font-size: 24px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .fab {
+                bottom: 16px;
+                right: 16px;
+                width: 56px;
+                height: 56px;
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-banner {
+                padding: 20px;
+            }
+            
+            .welcome-text h2 {
+                font-size: 20px;
+            }
+            
+            .banner-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="logo-text">
+                <h1>AASTU CMS</h1>
+                <p>Complaint Management</p>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-group">
+                <div class="nav-group-title">Main</div>
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fas fa-home nav-icon"></i>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="new-complaint.html" class="nav-item">
+                    <i class="fas fa-plus-circle nav-icon"></i>
+                    <span class="nav-text">New Complaint</span>
+                    <span class="nav-badge">3</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-history nav-icon"></i>
+                    <span class="nav-text">History</span>
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">Management</div>
+                <a href="staff-dashboard.html" class="nav-item">
+                    <i class="fas fa-tasks nav-icon"></i>
+                    <span class="nav-text">My Tasks</span>
+                    <span class="nav-badge">5</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users nav-icon"></i>
+                    <span class="nav-text">Team</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fas fa-chart-bar nav-icon"></i>
+                    <span class="nav-text">Analytics</span>
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">System</div>
+                <a href="admin-panel.html" class="nav-item">
+                    <i class="fas fa-cog nav-icon"></i>
+                    <span class="nav-text">Settings</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-question-circle nav-icon"></i>
+                    <span class="nav-text">Help & Support</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">JD</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">John Doe</div>
+                    <div class="user-role" id="userRole">Student</div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <div class="page-title">
+                <div class="page-title-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <span>Dashboard</span>
+            </div>
+
+            <div class="top-actions">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search complaints, categories..." id="searchInput">
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="quickComplaintBtn">
+                        <i class="fas fa-plus"></i> Quick Complaint
+                    </button>
+                    <button class="btn btn-secondary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+
+                <button class="notification-btn" id="notificationBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner fade-in">
+                <div class="welcome-text">
+                    <h2 id="welcomeMessage">Welcome back, John!</h2>
+                    <p>You have <strong>3 pending complaints</strong> and <strong>2 require your attention</strong>. Track, manage, and resolve issues efficiently.</p>
+                    
+                    <div class="banner-actions">
+                        <a href="new-complaint.html" class="btn-white">
+                            <i class="fas fa-plus"></i> Submit New Complaint
+                        </a>
+                        <a href="#" class="btn-white">
+                            <i class="fas fa-chart-line"></i> View Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card fade-in">
+                    <div class="stat-header">
+                        <div class="stat-title">New Complaints</div>
+                        <div class="stat-icon icon-new">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">12</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>18%</span>
+                        </div>
+                    </div>
+                    <div class="stat-detail">+2 from last week</div>
+                </div>
+
+                <div class="stat-card fade-in">
+                    <div class="stat-header">
+                        <div class="stat-title">In Progress</div>
+                        <div class="stat-icon icon-active">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">8</div>
+                        <div class="stat-trend trend-down">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>5%</span>
+                        </div>
+                    </div>
+                    <div class="stat-detail">3 nearing deadline</div>
+                </div>
+
+                <div class="stat-card fade-in">
+                    <div class="stat-header">
+                        <div class="stat-title">Pending Review</div>
+                        <div class="stat-icon icon-pending">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">5</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12%</span>
+                        </div>
+                    </div>
+                    <div class="stat-detail">1 high priority</div>
+                </div>
+
+                <div class="stat-card fade-in">
+                    <div class="stat-header">
+                        <div class="stat-title">Resolved</div>
+                        <div class="stat-icon icon-resolved">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value">24</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>22%</span>
+                        </div>
+                    </div>
+                    <div class="stat-detail">Avg. 4.2 days to resolve</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="section-title-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <span>Quick Actions</span>
+                    </h2>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+                </div>
+
+                <div class="actions-grid">
+                    <div class="action-card" onclick="window.location.href='new-complaint.html'">
+                        <div class="action-icon">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="action-title">Submit Complaint</div>
+                        <div class="action-desc">Report a new issue</div>
+                    </div>
+
+                    <div class="action-card" onclick="window.location.href='complaint-detail.html'">
+                        <div class="action-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="action-title">Track Status</div>
+                        <div class="action-desc">Check complaint progress</div>
+                    </div>
+
+                    <div class="action-card" onclick="showNotifications()">
+                        <div class="action-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="action-title">Notifications</div>
+                        <div class="action-desc">3 unread messages</div>
+                    </div>
+
+                    <div class="action-card" onclick="window.location.href='analytics.html'">
+                        <div class="action-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="action-title">Analytics</div>
+                        <div class="action-desc">View reports & insights</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Complaints -->
+            <div class="recent-complaints fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="section-title-icon">
+                            <i class="fas fa-list-alt"></i>
+                        </div>
+                        <span>Recent Complaints</span>
+                    </h2>
+                    <a href="#" class="btn btn-secondary">
+                        <i class="fas fa-eye"></i> View All
+                    </a>
+                </div>
+
+                <div class="table-container">
+                    <table id="complaintsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#CM-2024-001</td>
+                                <td>Network Issue in Lab B3</td>
+                                <td>Facilities</td>
+                                <td><span class="status-badge status-in-review">In Review</span></td>
+                                <td><span class="priority-badge priority-high">High</span></td>
+                                <td>Apr 10, 2024</td>
+                                <td class="action-buttons-cell">
+                                    <button class="btn btn-primary btn-sm" onclick="viewComplaint('CM-2024-001')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#CM-2024-002</td>
+                                <td>Late Grade Submission</td>
+                                <td>Academics</td>
+                                <td><span class="status-badge status-resolved">Resolved</span></td>
+                                <td><span class="priority-badge priority-medium">Medium</span></td>
+                                <td>Apr 5, 2024</td>
+                                <td class="action-buttons-cell">
+                                    <button class="btn btn-primary btn-sm" onclick="viewComplaint('CM-2024-002')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#CM-2024-003</td>
+                                <td>Library AC Not Working</td>
+                                <td>Facilities</td>
+                                <td><span class="status-badge status-new">New</span></td>
+                                <td><span class="priority-badge priority-medium">Medium</span></td>
+                                <td>Apr 12, 2024</td>
+                                <td class="action-buttons-cell">
+                                    <button class="btn btn-primary btn-sm" onclick="viewComplaint('CM-2024-003')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm">
+                                        <i class="fas fa-forward"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Calendar Widget -->
+            <div class="calendar-widget fade-in">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="section-title-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <span>Upcoming Deadlines</span>
+                    </h2>
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" id="prevMonth">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="calendar-nav-btn" id="nextMonth">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="calendar-day">Sun</div>
+                    <div class="calendar-day">Mon</div>
+                    <div class="calendar-day">Tue</div>
+                    <div class="calendar-day">Wed</div>
+                    <div class="calendar-day">Thu</div>
+                    <div class="calendar-day">Fri</div>
+                    <div class="calendar-day">Sat</div>
+
+                    <!-- Calendar dates will be populated by JavaScript -->
+                    <div id="calendarDates"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="fab" title="Quick Actions">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <!-- Notification Panel -->
+    <div id="notificationPanel" class="notification-panel"></div>
+
+    <script>
+        // JavaScript for Dashboard Page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get user data from localStorage
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            
+            // Update UI with user data
+            if (userData.name) {
+                document.getElementById('userName').textContent = userData.name;
+                document.getElementById('userAvatar').textContent = userData.avatar;
+                document.getElementById('userRole').textContent = userData.role.charAt(0).toUpperCase() + userData.role.slice(1);
+                
+                // Update welcome message
+                const welcomeMessage = document.getElementById('welcomeMessage');
+                const hour = new Date().getHours();
+                let greeting = 'Good ';
+                
+                if (hour < 12) greeting += 'Morning';
+                else if (hour < 18) greeting += 'Afternoon';
+                else greeting += 'Evening';
+                
+                welcomeMessage.textContent = `${greeting}, ${userData.name.split(' ')[0]}!`;
+            } else {
+                // Redirect to login if no user data
+                window.location.href = 'login.html';
+            }
+
+            // Elements
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const searchInput = document.getElementById('searchInput');
+            const quickComplaintBtn = document.getElementById('quickComplaintBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const notificationBtn = document.getElementById('notificationBtn');
+            const fab = document.getElementById('fab');
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+            const calendarDates = document.getElementById('calendarDates');
+
+            // Mobile menu toggle
+            mobileMenuBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 1200 && 
+                    !sidebar.contains(event.target) && 
+                    !mobileMenuBtn.contains(event.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+
+            // Logout
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('currentUser');
+                    window.location.href = 'login.html';
+                }
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#complaintsTable tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+
+            // Quick complaint
+            quickComplaintBtn.addEventListener('click', function() {
+                window.location.href = 'new-complaint.html';
+            });
+
+            // Refresh button
+            refreshBtn.addEventListener('click', function() {
+                this.classList.add('fa-spin');
+                setTimeout(() => {
+                    this.classList.remove('fa-spin');
+                    showNotification('Dashboard refreshed successfully!', 'success');
+                }, 1000);
+            });
+
+            // Notification button
+            notificationBtn.addEventListener('click', showNotifications);
+
+            // FAB actions
+            fab.addEventListener('click', function() {
+                const actions = [
+                    { icon: 'fa-plus', text: 'New Complaint', action: () => window.location.href = 'new-complaint.html' },
+                    { icon: 'fa-search', text: 'Search', action: () => searchInput.focus() },
+                    { icon: 'fa-download', text: 'Export', action: exportData },
+                    { icon: 'fa-cog', text: 'Settings', action: () => window.location.href = 'admin-panel.html' }
+                ];
+
+                showFABMenu(actions);
+            });
+
+            // Calendar functionality
+            let currentDate = new Date();
+            
+            function renderCalendar(date) {
+                calendarDates.innerHTML = '';
+                
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                
+                // Get first day of month
+                const firstDay = new Date(year, month, 1);
+                // Get last day of month
+                const lastDay = new Date(year, month + 1, 0);
+                // Get starting day (0 = Sunday, 1 = Monday, etc.)
+                const startDay = firstDay.getDay();
+                // Get total days in month
+                const daysInMonth = lastDay.getDate();
+                
+                // Today's date
+                const today = new Date();
+                const isToday = (day) => 
+                    day === today.getDate() && 
+                    month === today.getMonth() && 
+                    year === today.getYear();
+                
+                // Add empty cells for days before first day of month
+                for (let i = 0; i < startDay; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = 'calendar-date';
+                    calendarDates.appendChild(emptyCell);
+                }
+                
+                // Add days of month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateCell = document.createElement('div');
+                    dateCell.className = 'calendar-date';
+                    dateCell.textContent = day;
+                    
+                    // Mark today
+                    if (isToday(day)) {
+                        dateCell.classList.add('today');
+                    }
+                    
+                    // Mark dates with events (random for demo)
+                    if (Math.random() > 0.7) {
+                        dateCell.classList.add('has-event');
+                        dateCell.title = 'Has scheduled deadline';
+                    }
+                    
+                    dateCell.addEventListener('click', () => {
+                        const selectedDate = new Date(year, month, day);
+                        showDateEvents(selectedDate);
+                    });
+                    
+                    calendarDates.appendChild(dateCell);
+                }
+                
+                // Update month/year display
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                                   'July', 'August', 'September', 'October', 'November', 'December'];
+                document.querySelector('.section-title span').textContent = 
+                    `Upcoming Deadlines - ${monthNames[month]} ${year}`;
+            }
+            
+            // Initialize calendar
+            renderCalendar(currentDate);
+            
+            // Calendar navigation
+            prevMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar(currentDate);
+            });
+            
+            nextMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar(currentDate);
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + N: New complaint
+                if (e.ctrlKey && e.key === 'n') {
+                    e.preventDefault();
+                    window.location.href = 'new-complaint.html';
+                }
+                
+                // Ctrl + F: Focus search
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+                
+                // Ctrl + R: Refresh
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshBtn.click();
+                }
+                
+                // Esc: Clear search
+                if (e.key === 'Escape' && document.activeElement === searchInput) {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            });
+
+            // Auto-refresh every 5 minutes
+            setInterval(() => {
+                showNotification('Updating dashboard data...', 'info');
+            }, 300000);
+
+            // Add animation to cards
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Helper functions
+        function viewComplaint(id) {
+            // Store complaint ID for detail page
+            sessionStorage.setItem('viewingComplaint', id);
+            window.location.href = 'complaint-detail.html';
+        }
+
+        function showNotifications() {
+            const notifications = [
+                { id: 1, type: 'warning', title: 'Deadline Approaching', message: 'Complaint #CM-2024-001 needs resolution within 24 hours', time: '10 min ago' },
+                { id: 2, type: 'info', title: 'New Assignment', message: 'You have been assigned complaint #CM-2024-003', time: '1 hour ago' },
+                { id: 3, type: 'success', title: 'Complaint Resolved', message: 'Complaint #CM-2024-002 has been marked as resolved', time: '2 days ago' }
+            ];
+
+            let panel = document.getElementById('notificationPanel');
+            if (!panel) {
+                panel = document.createElement('div');
+                panel.id = 'notificationPanel';
+                panel.className = 'notification-panel';
+                document.body.appendChild(panel);
+            }
+
+            panel.innerHTML = `
+                <div class="notification-header">
+                    <h3>Notifications</h3>
+                    <button class="close-notifications">&times;</button>
+                </div>
+                <div class="notification-list">
+                    ${notifications.map(notif => `
+                        <div class="notification-item ${notif.type}">
+                            <div class="notification-icon">
+                                <i class="fas fa-${notif.type === 'warning' ? 'exclamation-triangle' : notif.type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">${notif.title}</div>
+                                <div class="notification-message">${notif.message}</div>
+                                <div class="notification-time">${notif.time}</div>
+                            </div>
+                            <button class="notification-action" onclick="markAsRead(${notif.id})">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="notification-footer">
+                    <button class="btn btn-primary" onclick="markAllAsRead()">Mark All as Read</button>
+                </div>
+            `;
+
+            panel.style.display = 'block';
+            panel.classList.add('show');
+
+            // Close button
+            panel.querySelector('.close-notifications').addEventListener('click', () => {
+                panel.classList.remove('show');
+                setTimeout(() => panel.style.display = 'none', 300);
+            });
+
+            // Close when clicking outside
+            setTimeout(() => {
+                document.addEventListener('click', function closePanel(e) {
+                    if (!panel.contains(e.target) && e.target !== notificationBtn) {
+                        panel.classList.remove('show');
+                        setTimeout(() => panel.style.display = 'none', 300);
+                        document.removeEventListener('click', closePanel);
+                    }
+                });
+            }, 100);
+        }
+
+        function showFABMenu(actions) {
+            const menu = document.createElement('div');
+            menu.className = 'fab-menu';
+            menu.innerHTML = `
+                ${actions.map((action, index) => `
+                    <div class="fab-menu-item" style="animation-delay: ${index * 0.1}s">
+                        <div class="fab-menu-icon">
+                            <i class="fas ${action.icon}"></i>
+                        </div>
+                        <span class="fab-menu-text">${action.text}</span>
+                    </div>
+                `).join('')}
+            `;
+
+            document.body.appendChild(menu);
+
+            // Position menu
+            const fabRect = fab.getBoundingClientRect();
+            menu.style.top = `${fabRect.top - actions.length * 60}px`;
+            menu.style.right = `${window.innerWidth - fabRect.right}px`;
+
+            // Add click handlers
+            actions.forEach((action, index) => {
+                menu.children[index].addEventListener('click', action.action);
+            });
+
+            // Remove menu when clicking outside
+            setTimeout(() => {
+                document.addEventListener('click', function closeMenu(e) {
+                    if (!menu.contains(e.target) && e.target !== fab) {
+                        menu.remove();
+                        document.removeEventListener('click', closeMenu);
+                    }
+                });
+            }, 100);
+        }
+
+        function showDateEvents(date) {
+            const events = [
+                { time: '10:00 AM', title: 'Review meeting for Lab issues' },
+                { time: '2:30 PM', title: 'Deadline: Complaint #CM-2024-001' }
+            ];
+
+            alert(`Events for ${date.toDateString()}:\n\n${events.map(e => `${e.time}: ${e.title}`).join('\n')}`);
+        }
+
+        function exportData() {
+            showNotification('Exporting dashboard data...', 'info');
+            // Simulate export
+            setTimeout(() => {
+                showNotification('Data exported successfully!', 'success');
+            }, 1500);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Add notification panel CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            .notification-panel {
+                position: fixed;
+                top: 80px;
+                right: 32px;
+                width: 380px;
+                background: var(--white);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-xl);
+                z-index: 9999;
+                display: none;
+                transform: translateY(-20px);
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+            
+            .notification-panel.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .notification-header {
+                padding: 20px;
+                border-bottom: 1px solid var(--light-gray);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .notification-header h3 {
+                margin: 0;
+                font-size: 18px;
+                font-weight: 700;
+            }
+            
+            .close-notifications {
+                background: none;
+                border: none;
+                font-size: 24px;
+                color: var(--medium-gray);
+                cursor: pointer;
+                padding: 4px;
+                border-radius: 4px;
+                transition: var(--transition);
+            }
+            
+            .close-notifications:hover {
+                color: var(--accent-red);
+                background: var(--light-gray);
+            }
+            
+            .notification-list {
+                max-height: 400px;
+                overflow-y: auto;
+            }
+            
+            .notification-item {
+                padding: 16px 20px;
+                border-bottom: 1px solid var(--light-gray);
+                display: flex;
+                gap: 16px;
+                align-items: flex-start;
+                transition: var(--transition);
+            }
+            
+            .notification-item:hover {
+                background: var(--lighter-gray);
+            }
+            
+            .notification-item.warning {
+                border-left: 4px solid var(--accent-yellow);
+            }
+            
+            .notification-item.success {
+                border-left: 4px solid var(--accent-green);
+            }
+            
+            .notification-item.info {
+                border-left: 4px solid var(--primary-blue);
+            }
+            
+            .notification-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                flex-shrink: 0;
+            }
+            
+            .notification-item.warning .notification-icon {
+                background: rgba(245, 158, 11, 0.1);
+                color: var(--accent-yellow);
+            }
+            
+            .notification-item.success .notification-icon {
+                background: rgba(16, 185, 129, 0.1);
+                color: var(--accent-green);
+            }
+            
+            .notification-item.info .notification-icon {
+                background: rgba(26, 86, 219, 0.1);
+                color: var(--primary-blue);
+            }
+            
+            .notification-content {
+                flex: 1;
+            }
+            
+            .notification-title {
+                font-weight: 600;
+                font-size: 14px;
+                margin-bottom: 4px;
+                color: var(--dark-gray);
+            }
+            
+            .notification-message {
+                font-size: 13px;
+                color: var(--medium-gray);
+                margin-bottom: 4px;
+                line-height: 1.4;
+            }
+            
+            .notification-time {
+                font-size: 12px;
+                color: var(--medium-gray);
+            }
+            
+            .notification-action {
+                background: none;
+                border: none;
+                color: var(--medium-gray);
+                cursor: pointer;
+                padding: 4px;
+                border-radius: 4px;
+                transition: var(--transition);
+            }
+            
+            .notification-action:hover {
+                color: var(--accent-red);
+                background: var(--light-gray);
+            }
+            
+            .notification-footer {
+                padding: 16px 20px;
+                border-top: 1px solid var(--light-gray);
+                text-align: center;
+            }
+            
+            .notification-toast {
+                position: fixed;
+                bottom: 32px;
+                right: 32px;
+                background: var(--white);
+                color: var(--dark-gray);
+                padding: 16px 24px;
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+            }
+            
+            .notification-toast.success {
+                border-left: 4px solid var(--accent-green);
+            }
+            
+            .notification-toast.error {
+                border-left: 4px solid var(--accent-red);
+            }
+            
+            .notification-toast.info {
+                border-left: 4px solid var(--primary-blue);
+            }
+            
+            .notification-toast.fade-out {
+                animation: slideOutRight 0.3s ease-out forwards;
+            }
+            
+            @keyframes slideOutRight {
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+            
+            .fab-menu {
+                position: fixed;
+                z-index: 1000;
+                background: var(--white);
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-xl);
+                padding: 8px;
+            }
+            
+            .fab-menu-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                border-radius: var(--radius-md);
+                cursor: pointer;
+                transition: var(--transition);
+                animation: fadeIn 0.3s ease-out;
+            }
+            
+            .fab-menu-item:hover {
+                background: var(--lighter-gray);
+            }
+            
+            .fab-menu-icon {
+                width: 36px;
+                height: 36px;
+                background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 14px;
+            }
+            
+            .fab-menu-text {
+                font-weight: 600;
+                font-size: 14px;
+                color: var(--dark-gray);
+            }
+            
+            @media (max-width: 768px) {
+                .notification-panel {
+                    width: calc(100% - 32px);
+                    right: 16px;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
