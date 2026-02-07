@@ -1,0 +1,2036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - AASTU Complaint System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <style>
+        /* CSS for Staff Dashboard */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1A56DB;
+            --secondary-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-yellow: #F59E0B;
+            --accent-purple: #8B5CF6;
+            --dark-gray: #1F2937;
+            --medium-gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --lighter-gray: #F9FAFB;
+            --white: #FFFFFF;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--lighter-gray);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 20px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .user-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: white;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 164px);
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--primary-blue);
+        }
+
+        /* Filters */
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--medium-gray);
+        }
+
+        .filter-select,
+        .filter-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .filter-select:focus,
+        .filter-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .filter-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .filter-checkbox input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .filter-checkbox span {
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--lighter-gray);
+            border-radius: var(--radius-md);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        /* Content Area */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+        }
+
+        .toolbar-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--lighter-gray);
+            border-radius: var(--radius-md);
+            padding: 4px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            color: var(--medium-gray);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .view-btn.active {
+            background: var(--white);
+            color: var(--primary-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Kanban Board */
+        .kanban-container {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            min-height: 600px;
+        }
+
+        .kanban-column {
+            min-width: 320px;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .column-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .column-count {
+            background: var(--light-gray);
+            color: var(--medium-gray);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .column-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 500px;
+        }
+
+        /* Complaint Card */
+        .complaint-card {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: grab;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .complaint-card:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .complaint-card.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .complaint-card.overdue {
+            border-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .complaint-card.high-priority::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--accent-red);
+            border-radius: var(--radius-md) 0 0 var(--radius-md);
+        }
+
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .complaint-id {
+            font-weight: 600;
+            color: var(--primary-blue);
+            font-size: 13px;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-priority {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+        }
+
+        .badge-category {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+        }
+
+        .complaint-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .complaint-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .complaint-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .assignee {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .assignee-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--primary-blue);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .assignee-name {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .deadline {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .deadline.overdue {
+            color: var(--accent-red);
+        }
+
+        .deadline.today {
+            color: var(--accent-yellow);
+        }
+
+        /* Bulk Actions */
+        .bulk-actions {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            bottom: 20px;
+            z-index: 90;
+        }
+
+        .bulk-actions.show {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .selected-count {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        /* Team View */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .team-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 16px rgba(26, 86, 219, 0.2);
+        }
+
+        .team-name {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            color: var(--medium-gray);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .team-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .team-stat {
+            text-align: center;
+        }
+
+        .team-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        .team-stat-label {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        /* Calendar View */
+        .calendar-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 12px;
+            font-weight: 600;
+            color: var(--medium-gray);
+        }
+
+        .calendar-date {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .calendar-date:hover {
+            border-color: var(--primary-blue);
+            background: var(--lighter-gray);
+        }
+
+        .calendar-date.today {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .calendar-date.has-events::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-red);
+            border-radius: 50%;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--medium-gray);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-red);
+            background: var(--light-gray);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                height: auto;
+            }
+            
+            .kanban-column {
+                min-width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .header-left, .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .toolbar-left, .toolbar-right {
+                width: 100%;
+            }
+            
+            .search-box {
+                width: 100%;
+            }
+            
+            .kanban-column {
+                min-width: 260px;
+            }
+            
+            .bulk-actions {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <a href="dashboard.html" class="logo" style="text-decoration: none; color: white;">
+                    <div class="logo-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Staff Dashboard</h1>
+                        <p>Complaint Management System</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="header-right">
+                <button class="btn btn-secondary" id="bulkAssignBtn">
+                    <i class="fas fa-users"></i> Bulk Assign
+                </button>
+                <button class="btn btn-primary" id="quickActionBtn">
+                    <i class="fas fa-bolt"></i> Quick Actions
+                </button>
+                
+                <div class="user-menu">
+                    <button class="user-btn" id="userMenuBtn">
+                        <div class="user-avatar" id="userAvatar">DA</div>
+                        <div class="user-info">
+                            <div class="user-name" id="userName">Dr. Alemayehu</div>
+                            <div class="user-role" id="userRole">Staff</div>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Stats -->
+            <div class="sidebar-section fade-in">
+                <h3 class="section-title"><i class="fas fa-chart-line"></i> My Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="assignedCount">8</div>
+                        <div class="stat-label">Assigned</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="resolvedCount">12</div>
+                        <div class="stat-label">Resolved</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="overdueCount">2</div>
+                        <div class="stat-label">Overdue</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="slaCount">94%</div>
+                        <div class="stat-label">SLA</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="sidebar-section fade-in">
+                <h3 class="section-title"><i class="fas fa-filter"></i> Filters</h3>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Department</label>
+                    <select class="filter-select" id="filterDepartment">
+                        <option value="">All Departments</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="ict">ICT Services</option>
+                        <option value="facilities">Facilities</option>
+                        <option value="academics">Academics</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Priority</label>
+                    <select class="filter-select" id="filterPriority">
+                        <option value="">All Priorities</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-select" id="filterStatus">
+                        <option value="">All Status</option>
+                        <option value="new">New</option>
+                        <option value="in-review">In Review</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Date Range</label>
+                    <input type="text" class="filter-input" id="filterDateRange" placeholder="Select date range">
+                </div>
+                
+                <div class="filter-group">
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="filterOverdue" checked>
+                        <span>Show Overdue Only</span>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="filterAssignedToMe" checked>
+                        <span>Assigned to Me</span>
+                    </div>
+                    <div class="filter-checkbox">
+                        <input type="checkbox" id="filterRequireAction">
+                        <span>Require Action</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" id="applyFiltersBtn">
+                    Apply Filters
+                </button>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 8px;" id="resetFiltersBtn">
+                    Reset Filters
+                </button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="sidebar-section fade-in">
+                <h3 class="section-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="btn btn-secondary" id="exportBtn">
+                        <i class="fas fa-file-export"></i> Export Data
+                    </button>
+                    <button class="btn btn-secondary" id="reportBtn">
+                        <i class="fas fa-chart-pie"></i> Generate Report
+                    </button>
+                    <button class="btn btn-secondary" id="settingsBtn">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Toolbar -->
+            <div class="toolbar fade-in">
+                <div class="toolbar-left">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search complaints...">
+                    </div>
+                    
+                    <select class="filter-select" id="sortSelect" style="width: 180px;">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="priority">Priority</option>
+                        <option value="deadline">Deadline</option>
+                    </select>
+                </div>
+                
+                <div class="toolbar-right">
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="kanban">
+                            <i class="fas fa-columns"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                        <button class="view-btn" data-view="calendar">
+                            <i class="fas fa-calendar"></i>
+                        </button>
+                        <button class="view-btn" data-view="team">
+                            <i class="fas fa-users"></i>
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kanban Board -->
+            <div class="view-content" id="kanbanView">
+                <div class="kanban-container" id="kanbanBoard">
+                    <!-- Columns will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- List View (Hidden) -->
+            <div class="view-content" id="listView" style="display: none;">
+                <div class="table-container">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--light-gray);">
+                                <th style="padding: 16px; text-align: left; width: 50px;">
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th style="padding: 16px; text-align: left;">ID</th>
+                                <th style="padding: 16px; text-align: left;">Title</th>
+                                <th style="padding: 16px; text-align: left;">Category</th>
+                                <th style="padding: 16px; text-align: left;">Priority</th>
+                                <th style="padding: 16px; text-align: left;">Status</th>
+                                <th style="padding: 16px; text-align: left;">Assignee</th>
+                                <th style="padding: 16px; text-align: left;">Deadline</th>
+                                <th style="padding: 16px; text-align: left;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listTableBody">
+                            <!-- Rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Calendar View (Hidden) -->
+            <div class="view-content" id="calendarView" style="display: none;">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <h2 style="font-size: 20px; font-weight: 700;">April 2024</h2>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="btn btn-secondary">Today</button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team View (Hidden) -->
+            <div class="view-content" id="teamView" style="display: none;">
+                <div class="team-grid" id="teamGrid">
+                    <!-- Team cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Bar -->
+    <div class="bulk-actions" id="bulkActionsBar">
+        <div class="selected-count" id="selectedCount">0 complaints selected</div>
+        <div style="display: flex; gap: 12px;">
+            <button class="btn btn-secondary" id="bulkAssignSelectedBtn">
+                <i class="fas fa-user-plus"></i> Assign
+            </button>
+            <button class="btn btn-secondary" id="bulkUpdateStatusBtn">
+                <i class="fas fa-edit"></i> Update Status
+            </button>
+            <button class="btn btn-secondary" id="bulkAddNoteBtn">
+                <i class="fas fa-comment"></i> Add Note
+            </button>
+            <button class="btn btn-primary" id="bulkProcessBtn">
+                <i class="fas fa-play"></i> Process Selected
+            </button>
+            <button class="btn btn-secondary" id="clearSelectionBtn">
+                <i class="fas fa-times"></i> Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Bulk Assign Modal -->
+    <div class="modal-overlay" id="bulkAssignModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Bulk Assign Complaints</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="filter-label">Assign to Team Member</label>
+                    <select class="filter-select" id="assignToSelect">
+                        <option value="">Select team member</option>
+                        <option value="alema">Dr. Alemayehu</option>
+                        <option value="solomon">Prof. Solomon</option>
+                        <option value="sara">Dr. Sara</option>
+                        <option value="michael">Mr. Michael</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="filter-label">Assignment Notes</label>
+                    <textarea class="filter-input" id="assignmentNotes" rows="4" 
+                              placeholder="Add notes for the assignee..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="filter-label">Deadline</label>
+                    <input type="date" class="filter-input" id="assignmentDeadline">
+                </div>
+                
+                <div class="form-group">
+                    <label class="filter-checkbox">
+                        <input type="checkbox" id="sendNotification" checked>
+                        <span>Send notification email</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBulkAssignBtn">Cancel</button>
+                <button class="btn btn-primary" id="confirmBulkAssignBtn">Assign Selected</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Menu -->
+    <div class="modal-overlay" id="quickActionsModal">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Quick Actions</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                    <button class="btn btn-secondary" id="qaNewComplaintBtn">
+                        <i class="fas fa-plus"></i> New Complaint
+                    </button>
+                    <button class="btn btn-secondary" id="qaQuickNoteBtn">
+                        <i class="fas fa-sticky-note"></i> Quick Note
+                    </button>
+                    <button class="btn btn-secondary" id="qaSlaReportBtn">
+                        <i class="fas fa-clock"></i> SLA Report
+                    </button>
+                    <button class="btn btn-secondary" id="qaExportBtn">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-secondary" id="qaSettingsBtn">
+                        <i class="fas fa-cog"></i> Settings
+                    </button>
+                    <button class="btn btn-secondary" id="qaHelpBtn">
+                        <i class="fas fa-question-circle"></i> Help
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // JavaScript for Staff Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (!userData.name) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update user info
+            document.getElementById('userName').textContent = userData.name;
+            document.getElementById('userAvatar').textContent = userData.avatar;
+            document.getElementById('userRole').textContent = userData.role;
+
+            // Initialize date range picker
+            flatpickr("#filterDateRange", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                defaultDate: ["2024-04-01", "2024-04-15"]
+            });
+
+            // Elements
+            const searchInput = document.getElementById('searchInput');
+            const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+            const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const viewBtns = document.querySelectorAll('.view-btn');
+            const viewContents = document.querySelectorAll('.view-content');
+            const bulkActionsBar = document.getElementById('bulkActionsBar');
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const bulkAssignModal = document.getElementById('bulkAssignModal');
+            const quickActionsModal = document.getElementById('quickActionsModal');
+            const quickActionBtn = document.getElementById('quickActionBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            const reportBtn = document.getElementById('reportBtn');
+            const settingsBtn = document.getElementById('settingsBtn');
+            const bulkAssignBtn = document.getElementById('bulkAssignBtn');
+
+            // Mock data
+            const complaints = [
+                { id: 'CM-2024-001', title: 'Network Issue in Lab B3', category: 'Facilities', priority: 'high', status: 'in-review', assignee: 'DA', deadline: '2024-04-15', column: 'in-review' },
+                { id: 'CM-2024-002', title: 'Late Grade Submission', category: 'Academics', priority: 'medium', status: 'resolved', assignee: 'DA', deadline: '2024-04-10', column: 'resolved' },
+                { id: 'CM-2024-003', title: 'Library AC Not Working', category: 'Facilities', priority: 'medium', status: 'new', assignee: null, deadline: '2024-04-18', column: 'new' },
+                { id: 'CM-2024-004', title: 'Projector Malfunction', category: 'Facilities', priority: 'high', status: 'in-progress', assignee: 'PS', deadline: '2024-04-12', column: 'in-progress' },
+                { id: 'CM-2024-005', title: 'Course Registration Issue', category: 'Academics', priority: 'low', status: 'new', assignee: null, deadline: '2024-04-20', column: 'new' },
+                { id: 'CM-2024-006', title: 'Dormitory Wi-Fi Problem', category: 'ICT', priority: 'high', status: 'in-progress', assignee: 'DA', deadline: '2024-04-14', column: 'in-progress' },
+                { id: 'CM-2024-007', title: 'Library Book Not Available', category: 'Library', priority: 'low', status: 'resolved', assignee: 'SS', deadline: '2024-04-05', column: 'resolved' },
+                { id: 'CM-2024-008', title: 'Cafeteria Food Quality', category: 'Campus Life', priority: 'medium', status: 'in-review', assignee: 'MS', deadline: '2024-04-16', column: 'in-review' }
+            ];
+
+            const teamMembers = [
+                { id: 'DA', name: 'Dr. Alemayehu', role: 'ICT Manager', assigned: 8, resolved: 24, overdue: 2 },
+                { id: 'PS', name: 'Prof. Solomon', role: 'Dept. Head', assigned: 5, resolved: 18, overdue: 0 },
+                { id: 'SS', name: 'Dr. Sara', role: 'Library Head', assigned: 3, resolved: 15, overdue: 1 },
+                { id: 'MS', name: 'Mr. Michael', role: 'Facilities Manager', assigned: 6, resolved: 20, overdue: 3 },
+                { id: 'AJ', name: 'Ms. Aja', role: 'Student Affairs', assigned: 4, resolved: 12, overdue: 0 }
+            ];
+
+            // Initialize views
+            initializeKanbanBoard();
+            initializeListView();
+            initializeCalendar();
+            initializeTeamView();
+
+            // View toggle
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const view = this.dataset.view;
+                    
+                    // Update active button
+                    viewBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected view
+                    viewContents.forEach(content => content.style.display = 'none');
+                    document.getElementById(`${view}View`).style.display = 'block';
+                    
+                    // Update URL for bookmarking
+                    history.replaceState(null, null, `?view=${view}`);
+                });
+            });
+
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                filterComplaints();
+            });
+
+            // Apply filters
+            applyFiltersBtn.addEventListener('click', function() {
+                filterComplaints();
+                showNotification('Filters applied successfully!', 'success');
+            });
+
+            // Reset filters
+            resetFiltersBtn.addEventListener('click', function() {
+                document.getElementById('filterDepartment').value = '';
+                document.getElementById('filterPriority').value = '';
+                document.getElementById('filterStatus').value = '';
+                document.getElementById('filterDateRange').value = '';
+                document.getElementById('filterOverdue').checked = false;
+                document.getElementById('filterAssignedToMe').checked = true;
+                document.getElementById('filterRequireAction').checked = false;
+                
+                filterComplaints();
+                showNotification('Filters reset!', 'info');
+            });
+
+            // Refresh
+            refreshBtn.addEventListener('click', function() {
+                this.classList.add('fa-spin');
+                setTimeout(() => {
+                    this.classList.remove('fa-spin');
+                    showNotification('Data refreshed!', 'success');
+                }, 1000);
+            });
+
+            // Quick actions
+            quickActionBtn.addEventListener('click', function() {
+                quickActionsModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Export
+            exportBtn.addEventListener('click', function() {
+                showExportOptions();
+            });
+
+            // Report
+            reportBtn.addEventListener('click', function() {
+                generateReport();
+            });
+
+            // Bulk assign
+            bulkAssignBtn.addEventListener('click', function() {
+                bulkAssignModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close modals
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            });
+
+            // Close modals when clicking outside
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + F: Focus search
+                if (e.ctrlKey && e.key === 'f') {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+                
+                // Ctrl + R: Refresh
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshBtn.click();
+                }
+                
+                // Ctrl + E: Export
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    exportBtn.click();
+                }
+                
+                // Ctrl + B: Bulk assign
+                if (e.ctrlKey && e.key === 'b') {
+                    e.preventDefault();
+                    bulkAssignBtn.click();
+                }
+                
+                // Escape: Clear search
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    searchInput.dispatchEvent(new Event('input'));
+                }
+            });
+
+            // Initialize drag and drop
+            initializeDragAndDrop();
+
+            // Add animation to cards
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Helper functions
+        function initializeKanbanBoard() {
+            const kanbanBoard = document.getElementById('kanbanBoard');
+            const columns = [
+                { id: 'new', title: 'New Complaints', color: 'var(--primary-blue)' },
+                { id: 'in-review', title: 'In Review', color: 'var(--accent-yellow)' },
+                { id: 'in-progress', title: 'In Progress', color: 'var(--secondary-blue)' },
+                { id: 'resolved', title: 'Resolved', color: 'var(--accent-green)' },
+                { id: 'closed', title: 'Closed', color: 'var(--medium-gray)' }
+            ];
+
+            kanbanBoard.innerHTML = columns.map(col => {
+                const columnComplaints = complaints.filter(c => c.column === col.id);
+                
+                return `
+                <div class="kanban-column" data-column="${col.id}">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <i class="fas fa-circle" style="color: ${col.color}; font-size: 8px;"></i>
+                            ${col.title}
+                        </div>
+                        <div class="column-count">${columnComplaints.length}</div>
+                    </div>
+                    <div class="column-content" data-column="${col.id}">
+                        ${columnComplaints.map(complaint => createComplaintCard(complaint)).join('')}
+                    </div>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 16px;" 
+                            onclick="addNewComplaint('${col.id}')">
+                        <i class="fas fa-plus"></i> Add Complaint
+                    </button>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function createComplaintCard(complaint) {
+            const priorityClass = complaint.priority === 'high' ? 'high-priority' : '';
+            const overdueClass = isOverdue(complaint.deadline) ? 'overdue' : '';
+            const assignee = complaint.assignee ? teamMembers.find(m => m.id === complaint.assignee) : null;
+            const deadlineClass = getDeadlineClass(complaint.deadline);
+            
+            return `
+            <div class="complaint-card ${priorityClass} ${overdueClass}" 
+                 data-id="${complaint.id}" 
+                 draggable="true">
+                <div class="complaint-header">
+                    <div class="complaint-id">${complaint.id}</div>
+                    <div class="badge badge-priority">${complaint.priority}</div>
+                </div>
+                <div class="complaint-title">${complaint.title}</div>
+                <div class="complaint-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span>${complaint.category}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="far fa-calendar"></i>
+                        <span>${formatDate(complaint.deadline)}</span>
+                    </div>
+                </div>
+                <div class="complaint-footer">
+                    <div class="assignee">
+                        ${assignee ? `
+                        <div class="assignee-avatar">${assignee.id}</div>
+                        <div class="assignee-name">${assignee.name.split(' ')[0]}</div>
+                        ` : '<div class="assignee-name">Unassigned</div>'}
+                    </div>
+                    <div class="deadline ${deadlineClass}">
+                        ${getDeadlineText(complaint.deadline)}
+                    </div>
+                </div>
+                <input type="checkbox" class="complaint-checkbox" style="position: absolute; top: 8px; right: 8px;"
+                       onchange="updateSelection()">
+            </div>
+            `;
+        }
+
+        function initializeListView() {
+            const tableBody = document.getElementById('listTableBody');
+            tableBody.innerHTML = complaints.map(complaint => {
+                const assignee = complaint.assignee ? teamMembers.find(m => m.id === complaint.assignee) : null;
+                const deadlineClass = getDeadlineClass(complaint.deadline);
+                
+                return `
+                <tr style="border-bottom: 1px solid var(--light-gray);">
+                    <td style="padding: 16px;">
+                        <input type="checkbox" class="list-checkbox" data-id="${complaint.id}">
+                    </td>
+                    <td style="padding: 16px; font-weight: 600; color: var(--primary-blue);">
+                        ${complaint.id}
+                    </td>
+                    <td style="padding: 16px;">${complaint.title}</td>
+                    <td style="padding: 16px;">
+                        <span class="badge badge-category">${complaint.category}</span>
+                    </td>
+                    <td style="padding: 16px;">
+                        <span class="badge badge-priority">${complaint.priority}</span>
+                    </td>
+                    <td style="padding: 16px;">
+                        <span class="badge" style="background: ${getStatusColor(complaint.status)}; color: white;">
+                            ${complaint.status}
+                        </span>
+                    </td>
+                    <td style="padding: 16px;">
+                        ${assignee ? assignee.name.split(' ')[0] : 'Unassigned'}
+                    </td>
+                    <td style="padding: 16px;" class="${deadlineClass}">
+                        ${formatDate(complaint.deadline)}
+                    </td>
+                    <td style="padding: 16px;">
+                        <button class="btn btn-secondary btn-sm" onclick="viewComplaint('${complaint.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="editComplaint('${complaint.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function initializeCalendar() {
+            const calendarGrid = document.getElementById('calendarGrid');
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            // Add day headers
+            days.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+            
+            // Add dates (for April 2024)
+            const today = new Date();
+            const firstDay = new Date(2024, 3, 1);
+            const lastDay = new Date(2024, 4, 0);
+            const startDay = firstDay.getDay();
+            
+            // Add empty cells for days before first of month
+            for (let i = 0; i < startDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-date';
+                calendarGrid.appendChild(emptyCell);
+            }
+            
+            // Add days of month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dateCell = document.createElement('div');
+                dateCell.className = 'calendar-date';
+                dateCell.textContent = day;
+                
+                // Mark today
+                if (day === today.getDate() && today.getMonth() === 3) {
+                    dateCell.classList.add('today');
+                }
+                
+                // Mark days with events
+                if (Math.random() > 0.7) {
+                    dateCell.classList.add('has-events');
+                    dateCell.title = `${Math.floor(Math.random() * 5) + 1} complaints due`;
+                }
+                
+                dateCell.addEventListener('click', () => {
+                    showDayComplaints(day);
+                });
+                
+                calendarGrid.appendChild(dateCell);
+            }
+        }
+
+        function initializeTeamView() {
+            const teamGrid = document.getElementById('teamGrid');
+            teamGrid.innerHTML = teamMembers.map(member => `
+                <div class="team-card">
+                    <div class="team-avatar">${member.id}</div>
+                    <div class="team-name">${member.name}</div>
+                    <div class="team-role">${member.role}</div>
+                    <div class="team-stats">
+                        <div class="team-stat">
+                            <div class="team-stat-value">${member.assigned}</div>
+                            <div class="team-stat-label">Assigned</div>
+                        </div>
+                        <div class="team-stat">
+                            <div class="team-stat-value">${member.resolved}</div>
+                            <div class="team-stat-label">Resolved</div>
+                        </div>
+                        <div class="team-stat">
+                            <div class="team-stat-value">${member.overdue}</div>
+                            <div class="team-stat-label">Overdue</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%;" 
+                            onclick="viewTeamMember('${member.id}')">
+                        <i class="fas fa-user-circle"></i> View Profile
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function initializeDragAndDrop() {
+            const complaintCards = document.querySelectorAll('.complaint-card');
+            const columns = document.querySelectorAll('.column-content');
+            
+            complaintCards.forEach(card => {
+                card.addEventListener('dragstart', handleDragStart);
+                card.addEventListener('dragend', handleDragEnd);
+            });
+            
+            columns.forEach(column => {
+                column.addEventListener('dragover', handleDragOver);
+                column.addEventListener('dragenter', handleDragEnter);
+                column.addEventListener('dragleave', handleDragLeave);
+                column.addEventListener('drop', handleDrop);
+            });
+        }
+
+        let draggedCard = null;
+
+        function handleDragStart(e) {
+            draggedCard = this;
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', this.dataset.id);
+        }
+
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+            draggedCard = null;
+            
+            columns.forEach(col => {
+                col.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        }
+
+        function handleDragLeave() {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            if (draggedCard) {
+                const newColumn = this.dataset.column;
+                
+                // Update complaint status
+                const complaintId = draggedCard.dataset.id;
+                updateComplaintStatus(complaintId, newColumn);
+                
+                // Move card to new column
+                this.appendChild(draggedCard);
+                
+                // Update column counts
+                updateColumnCounts();
+                
+                showNotification(`Complaint moved to ${getStatusName(newColumn)}`, 'success');
+            }
+        }
+
+        function updateColumnCounts() {
+            document.querySelectorAll('.kanban-column').forEach(column => {
+                const columnId = column.dataset.column;
+                const count = column.querySelectorAll('.complaint-card').length;
+                column.querySelector('.column-count').textContent = count;
+            });
+        }
+
+        function filterComplaints() {
+            const department = document.getElementById('filterDepartment').value;
+            const priority = document.getElementById('filterPriority').value;
+            const status = document.getElementById('filterStatus').value;
+            const overdueOnly = document.getElementById('filterOverdue').checked;
+            const assignedToMe = document.getElementById('filterAssignedToMe').checked;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            // Filter logic would go here
+            // For demo, just show a notification
+            showNotification('Complaints filtered!', 'info');
+        }
+
+        function updateSelection() {
+            const selected = document.querySelectorAll('.complaint-checkbox:checked, .list-checkbox:checked').length;
+            document.getElementById('selectedCount').textContent = `${selected} complaints selected`;
+            
+            if (selected > 0) {
+                bulkActionsBar.classList.add('show');
+            } else {
+                bulkActionsBar.classList.remove('show');
+            }
+        }
+
+        function showExportOptions() {
+            const options = [
+                { format: 'PDF', icon: 'fa-file-pdf', action: () => exportData('pdf') },
+                { format: 'Excel', icon: 'fa-file-excel', action: () => exportData('excel') },
+                { format: 'CSV', icon: 'fa-file-csv', action: () => exportData('csv') },
+                { format: 'Print', icon: 'fa-print', action: () => window.print() }
+            ];
+            
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.style.display = 'flex';
+            modal.innerHTML = `
+                <div class="modal" style="max-width: 400px;">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Export Options</h3>
+                        <button class="close-modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                            ${options.map(opt => `
+                                <button class="btn btn-secondary" onclick="${opt.action.toString().replace('()', '')}">
+                                    <i class="fas ${opt.icon}"></i> ${opt.format}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <label class="filter-label">Date Range</label>
+                            <input type="text" class="filter-input" id="exportDateRange" placeholder="Select date range">
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Initialize date picker
+            flatpickr("#exportDateRange", {
+                mode: "range",
+                dateFormat: "Y-m-d"
+            });
+            
+            // Close button
+            modal.querySelector('.close-modal').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            // Close when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.remove();
+                }
+            });
+        }
+
+        function exportData(format) {
+            showNotification(`Exporting data as ${format.toUpperCase()}...`, 'info');
+            
+            setTimeout(() => {
+                showNotification(`Data exported successfully as ${format.toUpperCase()}!`, 'success');
+                
+                // Remove modal
+                const modal = document.querySelector('.modal-overlay');
+                if (modal) modal.remove();
+            }, 1500);
+        }
+
+        function generateReport() {
+            showNotification('Generating report...', 'info');
+            
+            setTimeout(() => {
+                const reportData = {
+                    totalComplaints: complaints.length,
+                    resolved: complaints.filter(c => c.status === 'resolved').length,
+                    inProgress: complaints.filter(c => c.status === 'in-progress').length,
+                    averageResolutionTime: '4.2 days',
+                    slaCompliance: '94%'
+                };
+                
+                const reportWindow = window.open('', '_blank');
+                reportWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Complaint Management Report</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 40px; }
+                            h1 { color: #1A56DB; }
+                            .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 30px 0; }
+                            .stat-card { padding: 20px; background: #f5f7fb; border-radius: 10px; }
+                            .stat-value { font-size: 24px; font-weight: bold; color: #1A56DB; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Complaint Management Report</h1>
+                        <p>Generated on ${new Date().toLocaleDateString()}</p>
+                        
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-label">Total Complaints</div>
+                                <div class="stat-value">${reportData.totalComplaints}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Resolved</div>
+                                <div class="stat-value">${reportData.resolved}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">In Progress</div>
+                                <div class="stat-value">${reportData.inProgress}</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">Average Resolution Time</div>
+                                <div class="stat-value">${reportData.averageResolutionTime}</div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="window.print()" style="padding: 12px 24px; background: #1A56DB; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                            Print Report
+                        </button>
+                    </body>
+                    </html>
+                `);
+                reportWindow.document.close();
+                
+                showNotification('Report generated successfully!', 'success');
+            }, 2000);
+        }
+
+        function addNewComplaint(columnId) {
+            const columnContent = document.querySelector(`.column-content[data-column="${columnId}"]`);
+            const newComplaint = {
+                id: 'CM-2024-' + String(complaints.length + 1).padStart(3, '0'),
+                title: 'New Complaint',
+                category: 'General',
+                priority: 'medium',
+                status: columnId,
+                assignee: null,
+                deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                column: columnId
+            };
+            
+            complaints.push(newComplaint);
+            
+            const card = document.createElement('div');
+            card.className = 'complaint-card';
+            card.dataset.id = newComplaint.id;
+            card.draggable = true;
+            card.innerHTML = createComplaintCard(newComplaint);
+            
+            columnContent.insertBefore(card, columnContent.lastElementChild);
+            
+            // Initialize drag and drop for new card
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragend', handleDragEnd);
+            
+            updateColumnCounts();
+            showNotification('New complaint added!', 'success');
+        }
+
+        function viewComplaint(id) {
+            sessionStorage.setItem('viewingComplaint', id);
+            window.location.href = 'complaint-detail.html';
+        }
+
+        function editComplaint(id) {
+            showNotification(`Editing complaint ${id}...`, 'info');
+        }
+
+        function viewTeamMember(id) {
+            const member = teamMembers.find(m => m.id === id);
+            if (member) {
+                alert(`Team Member: ${member.name}\nRole: ${member.role}\nAssigned: ${member.assigned}\nResolved: ${member.resolved}\nOverdue: ${member.overdue}`);
+            }
+        }
+
+        function showDayComplaints(day) {
+            const date = `2024-04-${String(day).padStart(2, '0')}`;
+            const dayComplaints = complaints.filter(c => c.deadline === date);
+            
+            if (dayComplaints.length > 0) {
+                alert(`Complaints due on April ${day}, 2024:\n\n${dayComplaints.map(c => `• ${c.id}: ${c.title}`).join('\n')}`);
+            } else {
+                alert(`No complaints due on April ${day}, 2024`);
+            }
+        }
+
+        function updateComplaintStatus(id, newStatus) {
+            const complaint = complaints.find(c => c.id === id);
+            if (complaint) {
+                complaint.status = newStatus;
+                complaint.column = newStatus;
+            }
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function isOverdue(dateString) {
+            return new Date(dateString) < new Date();
+        }
+
+        function getDeadlineClass(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const diffDays = Math.ceil((date - today) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) return 'overdue';
+            if (diffDays === 0) return 'today';
+            if (diffDays <= 2) return 'warning';
+            return '';
+        }
+
+        function getDeadlineText(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const diffDays = Math.ceil((date - today) / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) return 'Overdue';
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Tomorrow';
+            return `${diffDays}d`;
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'new': return '#1A56DB';
+                case 'in-review': return '#F59E0B';
+                case 'in-progress': return '#3B82F6';
+                case 'resolved': return '#10B981';
+                default: return '#6B7280';
+            }
+        }
+
+        function getStatusName(status) {
+            switch(status) {
+                case 'new': return 'New Complaints';
+                case 'in-review': return 'In Review';
+                case 'in-progress': return 'In Progress';
+                case 'resolved': return 'Resolved';
+                default: return 'Closed';
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--white);
+                color: var(--dark-gray);
+                padding: 16px 24px;
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            if (type === 'success') notification.style.borderLeft = '4px solid var(--accent-green)';
+            if (type === 'error') notification.style.borderLeft = '4px solid var(--accent-red)';
+            if (type === 'info') notification.style.borderLeft = '4px solid var(--primary-blue)';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+            
+            .drag-over {
+                background: rgba(26, 86, 219, 0.05) !important;
+                border: 2px dashed var(--primary-blue) !important;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
