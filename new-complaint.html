@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Complaint - AASTU Complaint System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for New Complaint Page */
+        /* (Similar base styles as dashboard) */
+        /* Focus on form-specific styles */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1A56DB;
+            --secondary-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-yellow: #F59E0B;
+            --dark-gray: #1F2937;
+            --medium-gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --lighter-gray: #F9FAFB;
+            --white: #FFFFFF;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .complaint-form-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .form-stepper {
+            display: flex;
+            background: var(--lighter-gray);
+            padding: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding: 12px 0;
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 700;
+            color: var(--medium-gray);
+            transition: var(--transition);
+        }
+
+        .step.active .step-number {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: white;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--medium-gray);
+        }
+
+        .step.active .step-title {
+            color: var(--primary-blue);
+        }
+
+        .step.completed .step-title {
+            color: var(--accent-green);
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: var(--light-gray);
+            z-index: 1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .step-header {
+            margin-bottom: 32px;
+        }
+
+        .step-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+
+        .step-header p {
+            color: var(--medium-gray);
+            font-size: 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        .form-label .required {
+            color: var(--accent-red);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .radio-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--light-gray);
+            border-radius: 50%;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .radio-label input:checked + .radio-input {
+            border-color: var(--primary-blue);
+        }
+
+        .radio-label input:checked + .radio-input::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+        }
+
+        .file-upload-area {
+            border: 3px dashed var(--light-gray);
+            border-radius: var(--radius-md);
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--lighter-gray);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-blue);
+            background: rgba(26, 86, 219, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.05);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--medium-gray);
+            margin-bottom: 16px;
+        }
+
+        .file-upload-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            color: var(--medium-gray);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .file-list {
+            margin-top: 24px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--lighter-gray);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-icon {
+            font-size: 20px;
+            color: var(--primary-blue);
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .file-remove {
+            background: none;
+            border: none;
+            color: var(--accent-red);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .file-remove:hover {
+            background: var(--light-gray);
+        }
+
+        .preview-box {
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-top: 32px;
+            background: var(--lighter-gray);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .preview-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .preview-content {
+            line-height: 1.6;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--dark-gray);
+            border: 2px solid var(--light-gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-green), #34D399);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .back-to-dashboard {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .back-to-dashboard a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .back-to-dashboard a:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Character counter */
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: var(--medium-gray);
+            margin-top: 4px;
+        }
+
+        .char-counter.near-limit {
+            color: var(--accent-yellow);
+        }
+
+        .char-counter.over-limit {
+            color: var(--accent-red);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .form-content {
+                padding: 24px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-stepper {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .step::after {
+                display: none;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--white);
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            z-index: 1000;
+        }
+
+        .auto-save-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-exclamation-circle"></i> Submit New Complaint</h1>
+            <p>Fill out the form below to report an issue. Your complaint will be reviewed within 24 hours.</p>
+        </div>
+
+        <div class="complaint-form-container">
+            <!-- Form Stepper -->
+            <div class="form-stepper">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Basic Information</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Details</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Attachments</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Review & Submit</div>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="form-content">
+                <form id="complaintForm">
+                    <!-- Step 1: Basic Information -->
+                    <div class="form-step active" data-step="1">
+                        <div class="step-header">
+                            <h2>Basic Information</h2>
+                            <p>Provide general information about your complaint</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Complaint Title <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="complaintTitle" 
+                                       placeholder="e.g., Network Issue in Computer Lab" 
+                                       maxlength="100" required>
+                                <div class="char-counter" id="titleCounter">0/100</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Category <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="complaintCategory" required>
+                                    <option value="">Select a category</option>
+                                    <option value="academics">Academics</option>
+                                    <option value="facilities">Facilities</option>
+                                    <option value="administration">Administration</option>
+                                    <option value="finance">Finance</option>
+                                    <option value="campus-life">Campus Life</option>
+                                    <option value="ict">ICT Services</option>
+                                    <option value="library">Library</option>
+                                    <option value="security">Security</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Department <span class="required">*</span>
+                                </label>
+                                <select class="form-select" id="complaintDepartment" required>
+                                    <option value="">Select department</option>
+                                    <option value="computer-science">Computer Science</option>
+                                    <option value="engineering">Engineering</option>
+                                    <option value="business">Business</option>
+                                    <option value="ict-services">ICT Services</option>
+                                    <option value="facilities-mgmt">Facilities Management</option>
+                                    <option value="academic-affairs">Academic Affairs</option>
+                                    <option value="student-services">Student Services</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Location <span class="required">*</span>
+                                </label>
+                                <input type="text" class="form-input" id="complaintLocation" 
+                                       placeholder="e.g., Computer Lab B3, Building 4" required>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label">
+                                    Priority <span class="required">*</span>
+                                </label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="priority" value="low" required>
+                                        <div class="radio-input"></div>
+                                        <span>Low</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="priority" value="medium" checked required>
+                                        <div class="radio-input"></div>
+                                        <span>Medium</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="priority" value="high" required>
+                                        <div class="radio-input"></div>
+                                        <span>High</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="priority" value="critical" required>
+                                        <div class="radio-input"></div>
+                                        <span>Critical</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Details -->
+                    <div class="form-step" data-step="2">
+                        <div class="step-header">
+                            <h2>Complaint Details</h2>
+                            <p>Describe the issue in detail. Be as specific as possible.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Detailed Description <span class="required">*</span>
+                            </label>
+                            <textarea class="form-textarea" id="complaintDescription" 
+                                      placeholder="Please describe the issue in detail. Include when it started, how it affects you, and what you've done to try to resolve it."
+                                      rows="6" maxlength="2000" required></textarea>
+                            <div class="char-counter" id="descCounter">0/2000</div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Start Date <span class="required">*</span>
+                                </label>
+                                <input type="date" class="form-input" id="startDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    Is this issue recurring?
+                                </label>
+                                <select class="form-select" id="isRecurring">
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group full-width" id="recurringDetails" style="display: none;">
+                                <label class="form-label">
+                                    Recurrence Pattern
+                                </label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="recurrence" value="daily">
+                                        <div class="radio-input"></div>
+                                        <span>Daily</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="recurrence" value="weekly">
+                                        <div class="radio-input"></div>
+                                        <span>Weekly</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="recurrence" value="monthly">
+                                        <div class="radio-input"></div>
+                                        <span>Monthly</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="recurrence" value="random">
+                                        <div class="radio-input"></div>
+                                        <span>Random</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Expected Resolution
+                            </label>
+                            <textarea class="form-textarea" id="expectedResolution" 
+                                      placeholder="What would be an acceptable resolution for you?"
+                                      rows="3" maxlength="500"></textarea>
+                            <div class="char-counter" id="resolutionCounter">0/500</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Attachments -->
+                    <div class="form-step" data-step="3">
+                        <div class="step-header">
+                            <h2>Attachments</h2>
+                            <p>Upload evidence to support your complaint (optional)</p>
+                        </div>
+
+                        <div class="file-upload-area" id="fileDropArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="file-upload-text">
+                                Drop files here or click to browse
+                            </div>
+                            <div class="file-upload-hint">
+                                Maximum file size: 10MB. Supported formats: PDF, JPG, PNG, DOC, XLS
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="browseFilesBtn">
+                                <i class="fas fa-folder-open"></i> Browse Files
+                            </button>
+                            <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx" style="display: none;">
+                        </div>
+
+                        <div class="file-list" id="fileList">
+                            <!-- Files will be added here -->
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                Additional Notes
+                            </label>
+                            <textarea class="form-textarea" id="attachmentNotes" 
+                                      placeholder="Any additional notes about the attachments..."
+                                      rows="3" maxlength="500"></textarea>
+                            <div class="char-counter" id="notesCounter">0/500</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Review & Submit -->
+                    <div class="form-step" data-step="4">
+                        <div class="step-header">
+                            <h2>Review & Submit</h2>
+                            <p>Please review your complaint before submitting</p>
+                        </div>
+
+                        <div class="preview-box">
+                            <div class="preview-header">
+                                <h3>Complaint Preview</h3>
+                                <button type="button" class="btn btn-secondary" id="editComplaintBtn">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                            </div>
+
+                            <div class="preview-content" id="complaintPreview">
+                                <!-- Preview will be generated here -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="termsAgreement" required>
+                                I confirm that the information provided is accurate to the best of my knowledge.
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="notifyMe">
+                                Notify me about updates via email
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" style="display: none;">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <button type="submit" class="btn btn-success" id="submitBtn" style="display: none;">
+                            <i class="fas fa-paper-plane"></i> Submit Complaint
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="back-to-dashboard">
+            <a href="dashboard.html">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Auto-save Indicator -->
+        <div class="auto-save-indicator" id="autoSaveIndicator">
+            <i class="fas fa-save"></i>
+            <span>Draft saved</span>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for New Complaint Page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (!userData.name) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Elements
+            const form = document.getElementById('complaintForm');
+            const steps = document.querySelectorAll('.step');
+            const formSteps = document.querySelectorAll('.form-step');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const fileDropArea = document.getElementById('fileDropArea');
+            const fileInput = document.getElementById('fileInput');
+            const browseFilesBtn = document.getElementById('browseFilesBtn');
+            const fileList = document.getElementById('fileList');
+            const autoSaveIndicator = document.getElementById('autoSaveIndicator');
+            const editComplaintBtn = document.getElementById('editComplaintBtn');
+            const complaintPreview = document.getElementById('complaintPreview');
+            const isRecurringSelect = document.getElementById('isRecurring');
+            const recurringDetails = document.getElementById('recurringDetails');
+
+            // State
+            let currentStep = 1;
+            const maxSteps = 4;
+            let files = [];
+            let autoSaveTimer;
+
+            // Set default date to today
+            document.getElementById('startDate').valueAsDate = new Date();
+
+            // Character counters
+            document.getElementById('complaintTitle').addEventListener('input', function() {
+                updateCharCounter('titleCounter', this.value.length, 100);
+            });
+
+            document.getElementById('complaintDescription').addEventListener('input', function() {
+                updateCharCounter('descCounter', this.value.length, 2000);
+            });
+
+            document.getElementById('expectedResolution').addEventListener('input', function() {
+                updateCharCounter('resolutionCounter', this.value.length, 500);
+            });
+
+            document.getElementById('attachmentNotes').addEventListener('input', function() {
+                updateCharCounter('notesCounter', this.value.length, 500);
+            });
+
+            // Recurring issue toggle
+            isRecurringSelect.addEventListener('change', function() {
+                recurringDetails.style.display = this.value === 'yes' ? 'block' : 'none';
+            });
+
+            // File upload handling
+            browseFilesBtn.addEventListener('click', () => fileInput.click());
+            
+            fileInput.addEventListener('change', handleFiles);
+            
+            // Drag and drop
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                fileDropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                fileDropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                fileDropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                fileDropArea.classList.add('dragover');
+            }
+
+            function unhighlight() {
+                fileDropArea.classList.remove('dragover');
+            }
+
+            fileDropArea.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const droppedFiles = dt.files;
+                handleFiles({ target: { files: droppedFiles } });
+            }
+
+            function handleFiles(e) {
+                const newFiles = Array.from(e.target.files);
+                
+                // Check file size (max 10MB)
+                const oversized = newFiles.filter(file => file.size > 10 * 1024 * 1024);
+                if (oversized.length > 0) {
+                    alert('Some files exceed 10MB limit and were not added.');
+                }
+                
+                // Add valid files
+                const validFiles = newFiles.filter(file => file.size <= 10 * 1024 * 1024);
+                files = [...files, ...validFiles];
+                renderFileList();
+                
+                // Reset file input
+                fileInput.value = '';
+            }
+
+            function renderFileList() {
+                fileList.innerHTML = '';
+                
+                if (files.length === 0) {
+                    fileList.innerHTML = '<p style="text-align: center; color: var(--medium-gray); padding: 20px;">No files added yet</p>';
+                    return;
+                }
+                
+                files.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    
+                    const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                    const fileIcon = getFileIcon(file.type);
+                    
+                    fileItem.innerHTML = `
+                        <div class="file-info">
+                            <div class="file-icon">
+                                <i class="${fileIcon}"></i>
+                            </div>
+                            <div>
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${fileSize} MB</div>
+                            </div>
+                        </div>
+                        <button type="button" class="file-remove" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    fileList.appendChild(fileItem);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.file-remove').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        files.splice(index, 1);
+                        renderFileList();
+                    });
+                });
+            }
+
+            function getFileIcon(mimeType) {
+                if (mimeType.includes('pdf')) return 'fas fa-file-pdf';
+                if (mimeType.includes('image')) return 'fas fa-file-image';
+                if (mimeType.includes('word') || mimeType.includes('document')) return 'fas fa-file-word';
+                if (mimeType.includes('excel') || mimeType.includes('spreadsheet')) return 'fas fa-file-excel';
+                return 'fas fa-file';
+            }
+
+            // Navigation
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+
+            function updateStep() {
+                // Update stepper
+                steps.forEach((step, index) => {
+                    const stepNum = parseInt(step.dataset.step);
+                    step.classList.remove('active', 'completed');
+                    
+                    if (stepNum < currentStep) {
+                        step.classList.add('completed');
+                    } else if (stepNum === currentStep) {
+                        step.classList.add('active');
+                    }
+                });
+
+                // Update form steps
+                formSteps.forEach(step => {
+                    step.classList.remove('active');
+                    if (parseInt(step.dataset.step) === currentStep) {
+                        step.classList.add('active');
+                    }
+                });
+
+                // Update buttons
+                prevBtn.style.display = currentStep > 1 ? 'inline-flex' : 'none';
+                nextBtn.style.display = currentStep < maxSteps ? 'inline-flex' : 'none';
+                submitBtn.style.display = currentStep === maxSteps ? 'inline-flex' : 'none';
+
+                // Auto-save
+                autoSave();
+                
+                // Generate preview on last step
+                if (currentStep === maxSteps) {
+                    generatePreview();
+                }
+            }
+
+            function nextStep() {
+                if (!validateStep(currentStep)) return;
+                
+                if (currentStep < maxSteps) {
+                    currentStep++;
+                    updateStep();
+                }
+            }
+
+            function prevStep() {
+                if (currentStep > 1) {
+                    currentStep--;
+                    updateStep();
+                }
+            }
+
+            function validateStep(step) {
+                let isValid = true;
+                
+                switch(step) {
+                    case 1:
+                        const title = document.getElementById('complaintTitle');
+                        const category = document.getElementById('complaintCategory');
+                        const department = document.getElementById('complaintDepartment');
+                        const location = document.getElementById('complaintLocation');
+                        const priority = document.querySelector('input[name="priority"]:checked');
+                        
+                        if (!title.value.trim()) {
+                            showError(title, 'Title is required');
+                            isValid = false;
+                        }
+                        
+                        if (!category.value) {
+                            showError(category, 'Please select a category');
+                            isValid = false;
+                        }
+                        
+                        if (!department.value) {
+                            showError(department, 'Please select a department');
+                            isValid = false;
+                        }
+                        
+                        if (!location.value.trim()) {
+                            showError(location, 'Location is required');
+                            isValid = false;
+                        }
+                        
+                        if (!priority) {
+                            alert('Please select a priority level');
+                            isValid = false;
+                        }
+                        break;
+                        
+                    case 2:
+                        const description = document.getElementById('complaintDescription');
+                        const startDate = document.getElementById('startDate');
+                        
+                        if (!description.value.trim()) {
+                            showError(description, 'Description is required');
+                            isValid = false;
+                        }
+                        
+                        if (!startDate.value) {
+                            showError(startDate, 'Start date is required');
+                            isValid = false;
+                        }
+                        break;
+                }
+                
+                return isValid;
+            }
+
+            function showError(element, message) {
+                element.style.borderColor = 'var(--accent-red)';
+                element.classList.add('shake');
+                
+                // Create error message
+                let errorMsg = element.parentElement.querySelector('.error-message');
+                if (!errorMsg) {
+                    errorMsg = document.createElement('div');
+                    errorMsg.className = 'error-message';
+                    element.parentElement.appendChild(errorMsg);
+                }
+                errorMsg.textContent = message;
+                errorMsg.style.color = 'var(--accent-red)';
+                errorMsg.style.fontSize = '14px';
+                errorMsg.style.marginTop = '4px';
+                
+                // Remove error on input
+                element.addEventListener('input', function() {
+                    this.style.borderColor = '';
+                    this.classList.remove('shake');
+                    if (errorMsg) errorMsg.remove();
+                }, { once: true });
+            }
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!validateStep(currentStep)) return;
+                
+                // Check terms agreement
+                if (!document.getElementById('termsAgreement').checked) {
+                    alert('You must agree to the terms before submitting');
+                    return;
+                }
+                
+                // Show loading state
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+                
+                // Get form data
+                const formData = new FormData();
+                formData.append('title', document.getElementById('complaintTitle').value);
+                formData.append('category', document.getElementById('complaintCategory').value);
+                formData.append('department', document.getElementById('complaintDepartment').value);
+                formData.append('location', document.getElementById('complaintLocation').value);
+                formData.append('priority', document.querySelector('input[name="priority"]:checked').value);
+                formData.append('description', document.getElementById('complaintDescription').value);
+                formData.append('startDate', document.getElementById('startDate').value);
+                formData.append('expectedResolution', document.getElementById('expectedResolution').value);
+                formData.append('attachmentNotes', document.getElementById('attachmentNotes').value);
+                
+                // Add files
+                files.forEach(file => {
+                    formData.append('attachments', file);
+                });
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Generate complaint ID
+                    const complaintId = 'CM-' + new Date().getFullYear() + '-' + 
+                        String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+                    
+                    // Store in localStorage (simulating backend)
+                    const complaints = JSON.parse(localStorage.getItem('complaints') || '[]');
+                    complaints.push({
+                        id: complaintId,
+                        ...Object.fromEntries(formData.entries()),
+                        files: files.map(f => f.name),
+                        status: 'new',
+                        submittedBy: userData.name,
+                        submittedDate: new Date().toISOString(),
+                        assignedTo: null
+                    });
+                    localStorage.setItem('complaints', JSON.stringify(complaints));
+                    
+                    // Show success message
+                    const successMsg = document.createElement('div');
+                    successMsg.className = 'success-message';
+                    successMsg.style.cssText = `
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: var(--white);
+                        padding: 40px;
+                        border-radius: var(--radius-lg);
+                        box-shadow: var(--shadow-xl);
+                        text-align: center;
+                        z-index: 10000;
+                        animation: fadeIn 0.3s ease-out;
+                        min-width: 400px;
+                    `;
+                    successMsg.innerHTML = `
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent-green), #34D399); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 32px;">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h3 style="margin-bottom: 12px; color: var(--dark-gray);">Complaint Submitted Successfully!</h3>
+                        <p style="color: var(--medium-gray); margin-bottom: 20px;">Your tracking ID is: <strong>${complaintId}</strong></p>
+                        <div style="display: flex; gap: 12px; justify-content: center;">
+                            <button class="btn btn-primary" id="viewComplaintBtn">
+                                <i class="fas fa-eye"></i> View Complaint
+                            </button>
+                            <button class="btn btn-secondary" id="newComplaintBtn">
+                                <i class="fas fa-plus"></i> New Complaint
+                            </button>
+                        </div>
+                    `;
+                    document.body.appendChild(successMsg);
+                    
+                    // Add overlay
+                    const overlay = document.createElement('div');
+                    overlay.style.cssText = `
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(0, 0, 0, 0.5);
+                        z-index: 9999;
+                        animation: fadeIn 0.3s ease-out;
+                    `;
+                    document.body.appendChild(overlay);
+                    
+                    // Button handlers
+                    document.getElementById('viewComplaintBtn').addEventListener('click', () => {
+                        sessionStorage.setItem('viewingComplaint', complaintId);
+                        window.location.href = 'complaint-detail.html';
+                    });
+                    
+                    document.getElementById('newComplaintBtn').addEventListener('click', () => {
+                        window.location.reload();
+                    });
+                    
+                }, 2000);
+            });
+
+            // Edit complaint button
+            editComplaintBtn.addEventListener('click', () => {
+                currentStep = 1;
+                updateStep();
+            });
+
+            // Generate preview
+            function generatePreview() {
+                const formData = {
+                    title: document.getElementById('complaintTitle').value,
+                    category: document.getElementById('complaintCategory').value,
+                    department: document.getElementById('complaintDepartment').value,
+                    location: document.getElementById('complaintLocation').value,
+                    priority: document.querySelector('input[name="priority"]:checked')?.value || 'Not specified',
+                    description: document.getElementById('complaintDescription').value,
+                    startDate: document.getElementById('startDate').value,
+                    expectedResolution: document.getElementById('expectedResolution').value,
+                    attachmentCount: files.length,
+                    attachmentNotes: document.getElementById('attachmentNotes').value
+                };
+                
+                const priorityColors = {
+                    low: 'var(--accent-green)',
+                    medium: 'var(--accent-yellow)',
+                    high: 'var(--accent-red)',
+                    critical: '#DC2626'
+                };
+                
+                complaintPreview.innerHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Title</h4>
+                        <p style="font-size: 18px; font-weight: 600; color: var(--dark-gray);">${formData.title}</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px;">
+                        <div>
+                            <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Category</h4>
+                            <p style="font-weight: 600;">${formData.category}</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Department</h4>
+                            <p style="font-weight: 600;">${formData.department}</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Location</h4>
+                            <p style="font-weight: 600;">${formData.location}</p>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Priority</h4>
+                            <p style="font-weight: 600; color: ${priorityColors[formData.priority] || 'inherit'}">
+                                ${formData.priority.toUpperCase()}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Description</h4>
+                        <p style="line-height: 1.6;">${formData.description}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Start Date</h4>
+                        <p>${new Date(formData.startDate).toLocaleDateString('en-US', { 
+                            weekday: 'long', 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        })}</p>
+                    </div>
+                    
+                    ${formData.expectedResolution ? `
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Expected Resolution</h4>
+                        <p>${formData.expectedResolution}</p>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: var(--medium-gray); margin-bottom: 4px;">Attachments</h4>
+                        <p>${formData.attachmentCount} file(s) attached</p>
+                        ${formData.attachmentNotes ? `
+                        <p style="margin-top: 8px; font-size: 14px; color: var(--medium-gray);">
+                            <strong>Notes:</strong> ${formData.attachmentNotes}
+                        </p>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            // Auto-save functionality
+            function autoSave() {
+                clearTimeout(autoSaveTimer);
+                
+                autoSaveTimer = setTimeout(() => {
+                    const draft = {
+                        title: document.getElementById('complaintTitle').value,
+                        category: document.getElementById('complaintCategory').value,
+                        department: document.getElementById('complaintDepartment').value,
+                        location: document.getElementById('complaintLocation').value,
+                        priority: document.querySelector('input[name="priority"]:checked')?.value,
+                        description: document.getElementById('complaintDescription').value,
+                        startDate: document.getElementById('startDate').value,
+                        expectedResolution: document.getElementById('expectedResolution').value,
+                        step: currentStep,
+                        lastSaved: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('complaintDraft', JSON.stringify(draft));
+                    
+                    // Show indicator
+                    autoSaveIndicator.classList.add('show');
+                    setTimeout(() => autoSaveIndicator.classList.remove('show'), 2000);
+                }, 2000);
+            }
+
+            // Load draft if exists
+            const draft = JSON.parse(localStorage.getItem('complaintDraft'));
+            if (draft) {
+                if (confirm('You have a saved draft. Would you like to continue?')) {
+                    document.getElementById('complaintTitle').value = draft.title || '';
+                    document.getElementById('complaintCategory').value = draft.category || '';
+                    document.getElementById('complaintDepartment').value = draft.department || '';
+                    document.getElementById('complaintLocation').value = draft.location || '';
+                    if (draft.priority) {
+                        document.querySelector(`input[name="priority"][value="${draft.priority}"]`).checked = true;
+                    }
+                    document.getElementById('complaintDescription').value = draft.description || '';
+                    document.getElementById('startDate').value = draft.startDate || '';
+                    document.getElementById('expectedResolution').value = draft.expectedResolution || '';
+                    
+                    currentStep = draft.step || 1;
+                    updateStep();
+                } else {
+                    localStorage.removeItem('complaintDraft');
+                }
+            }
+
+            // Character counter helper
+            function updateCharCounter(counterId, length, max) {
+                const counter = document.getElementById(counterId);
+                counter.textContent = `${length}/${max}`;
+                
+                counter.classList.remove('near-limit', 'over-limit');
+                if (length > max * 0.9) {
+                    counter.classList.add('near-limit');
+                }
+                if (length > max) {
+                    counter.classList.add('over-limit');
+                }
+            }
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + S: Save draft
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    autoSave();
+                    showNotification('Draft saved!', 'success');
+                }
+                
+                // Ctrl + Enter: Submit
+                if (e.ctrlKey && e.key === 'Enter') {
+                    if (currentStep === maxSteps) {
+                        submitBtn.click();
+                    } else {
+                        nextBtn.click();
+                    }
+                }
+                
+                // Escape: Back to dashboard
+                if (e.key === 'Escape') {
+                    if (confirm('Are you sure you want to leave? Your draft will be saved.')) {
+                        window.location.href = 'dashboard.html';
+                    }
+                }
+            });
+
+            // Initialize character counters
+            updateCharCounter('titleCounter', document.getElementById('complaintTitle').value.length, 100);
+            updateCharCounter('descCounter', document.getElementById('complaintDescription').value.length, 2000);
+        });
+
+        // Notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--white);
+                color: var(--dark-gray);
+                padding: 16px 24px;
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            if (type === 'success') notification.style.borderLeft = '4px solid var(--accent-green)';
+            if (type === 'error') notification.style.borderLeft = '4px solid var(--accent-red)';
+            if (type === 'info') notification.style.borderLeft = '4px solid var(--primary-blue)';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
