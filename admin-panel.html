@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - AASTU Complaint System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for Admin Panel */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1A56DB;
+            --secondary-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-yellow: #F59E0B;
+            --accent-purple: #8B5CF6;
+            --dark-gray: #1F2937;
+            --medium-gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --lighter-gray: #F9FAFB;
+            --white: #FFFFFF;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--lighter-gray);
+            color: var(--dark-gray);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .admin-header {
+            background: linear-gradient(135deg, var(--dark-gray), #374151);
+            color: white;
+            padding: 20px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-content {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-purple);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .admin-logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .admin-logo-text p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .admin-user-menu {
+            position: relative;
+        }
+
+        .admin-user-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .admin-user-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* Main Layout */
+        .admin-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            position: sticky;
+            top: 140px;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .admin-nav {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            color: var(--medium-gray);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .admin-nav-item:hover {
+            background: var(--lighter-gray);
+            color: var(--primary-blue);
+            transform: translateX(8px);
+        }
+
+        .admin-nav-item.active {
+            background: rgba(26, 86, 219, 0.1);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .admin-nav-icon {
+            width: 24px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .admin-nav-text {
+            flex: 1;
+        }
+
+        .admin-nav-badge {
+            background: var(--accent-red);
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* System Info */
+        .system-info-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .system-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .system-metric {
+            text-align: center;
+            padding: 16px;
+            background: var(--lighter-gray);
+            border-radius: var(--radius-md);
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        /* Content Area */
+        .admin-content {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Content Header */
+        .content-header {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 12px rgba(26, 86, 219, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--dark-gray);
+            border: 2px solid var(--light-gray);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--accent-green), #34D399);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Admin Sections */
+        .admin-section {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Users Management */
+        .users-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .users-search {
+            position: relative;
+            width: 300px;
+        }
+
+        .users-search-input {
+            width: 100%;
+            padding: 12px 16px 12px 48px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .users-search-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .users-search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+        }
+
+        .users-table-container {
+            overflow-x: auto;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--light-gray);
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .users-table th {
+            background: var(--lighter-gray);
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .users-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 14px;
+        }
+
+        .users-table tr:hover {
+            background: var(--lighter-gray);
+        }
+
+        .user-role-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+
+        .role-admin { background: rgba(139, 92, 246, 0.1); color: var(--accent-purple); }
+        .role-staff { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+        .role-dept-head { background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow); }
+        .role-student { background: rgba(59, 130, 246, 0.1); color: var(--secondary-blue); }
+
+        .user-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .status-active { background: var(--accent-green); }
+        .status-inactive { background: var(--medium-gray); }
+        .status-suspended { background: var(--accent-red); }
+
+        /* Categories Management */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .category-card {
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .category-card:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .category-desc {
+            color: var(--medium-gray);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .category-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        /* Settings */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .settings-group {
+            background: var(--lighter-gray);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .settings-group-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .setting-item {
+            margin-bottom: 20px;
+        }
+
+        .setting-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+
+        .setting-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        .setting-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .setting-description {
+            font-size: 12px;
+            color: var(--medium-gray);
+            margin-top: 4px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent-green);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Audit Logs */
+        .audit-filters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .audit-log {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+
+        .audit-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            gap: 16px;
+        }
+
+        .audit-item:last-child {
+            border-bottom: none;
+        }
+
+        .audit-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .audit-content {
+            flex: 1;
+        }
+
+        .audit-action {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .audit-details {
+            font-size: 14px;
+            color: var(--medium-gray);
+            margin-bottom: 4px;
+        }
+
+        .audit-meta {
+            font-size: 12px;
+            color: var(--medium-gray);
+            display: flex;
+            gap: 16px;
+        }
+
+        /* Backup & Restore */
+        .backup-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .backup-card {
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .backup-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .backup-info {
+            margin-bottom: 24px;
+        }
+
+        .backup-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .backup-desc {
+            color: var(--medium-gray);
+            font-size: 14px;
+        }
+
+        /* API Management */
+        .api-keys {
+            margin-top: 24px;
+        }
+
+        .api-key-card {
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .api-key-info h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .api-key-code {
+            font-family: monospace;
+            background: var(--lighter-gray);
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            color: var(--dark-gray);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sidebar {
+                position: static;
+                height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 16px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+            }
+            
+            .admin-container {
+                padding: 16px;
+            }
+            
+            .content-header {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .users-search {
+                width: 100%;
+            }
+            
+            .settings-grid,
+            .categories-grid,
+            .backup-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="header-content">
+            <div class="header-left">
+                <div class="admin-logo">
+                    <div class="admin-logo-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="admin-logo-text">
+                        <h1>Admin Panel</h1>
+                        <p>System Configuration & Management</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <div class="system-status">
+                    <div class="status-indicator"></div>
+                    <span>System: <strong>Online</strong></span>
+                </div>
+                
+                <div class="admin-user-menu">
+                    <button class="admin-user-btn" id="adminMenuBtn">
+                        <div class="admin-user-avatar" id="adminAvatar">AU</div>
+                        <div style="text-align: left;">
+                            <div style="font-weight: 600;" id="adminName">Admin User</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Super Administrator</div>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-nav fade-in">
+                <div class="admin-nav-item active" data-section="users">
+                    <i class="fas fa-users admin-nav-icon"></i>
+                    <span class="admin-nav-text">User Management</span>
+                    <span class="admin-nav-badge">3</span>
+                </div>
+                <div class="admin-nav-item" data-section="departments">
+                    <i class="fas fa-building admin-nav-icon"></i>
+                    <span class="admin-nav-text">Departments</span>
+                </div>
+                <div class="admin-nav-item" data-section="categories">
+                    <i class="fas fa-tags admin-nav-icon"></i>
+                    <span class="admin-nav-text">Categories</span>
+                </div>
+                <div class="admin-nav-item" data-section="workflow">
+                    <i class="fas fa-project-diagram admin-nav-icon"></i>
+                    <span class="admin-nav-text">Workflow</span>
+                </div>
+                <div class="admin-nav-item" data-section="sla">
+                    <i class="fas fa-clock admin-nav-icon"></i>
+                    <span class="admin-nav-text">SLA Configuration</span>
+                </div>
+                <div class="admin-nav-item" data-section="settings">
+                    <i class="fas fa-cog admin-nav-icon"></i>
+                    <span class="admin-nav-text">System Settings</span>
+                </div>
+                <div class="admin-nav-item" data-section="audit">
+                    <i class="fas fa-history admin-nav-icon"></i>
+                    <span class="admin-nav-text">Audit Logs</span>
+                </div>
+                <div class="admin-nav-item" data-section="backup">
+                    <i class="fas fa-database admin-nav-icon"></i>
+                    <span class="admin-nav-text">Backup & Restore</span>
+                </div>
+                <div class="admin-nav-item" data-section="api">
+                    <i class="fas fa-code admin-nav-icon"></i>
+                    <span class="admin-nav-text">API Management</span>
+                </div>
+                <div class="admin-nav-item" data-section="reports">
+                    <i class="fas fa-chart-bar admin-nav-icon"></i>
+                    <span class="admin-nav-text">System Reports</span>
+                </div>
+            </div>
+
+            <div class="system-info-card fade-in">
+                <h3 style="margin-bottom: 20px; font-size: 16px; font-weight: 700;">
+                    <i class="fas fa-server"></i> System Status
+                </h3>
+                
+                <div class="system-metrics">
+                    <div class="system-metric">
+                        <div class="metric-value">1,248</div>
+                        <div class="metric-label">Total Users</div>
+                    </div>
+                    <div class="system-metric">
+                        <div class="metric-value">98.7%</div>
+                        <div class="metric-label">Uptime</div>
+                    </div>
+                    <div class="system-metric">
+                        <div class="metric-value">256</div>
+                        <div class="metric-label">Active Sessions</div>
+                    </div>
+                    <div class="system-metric">
+                        <div class="metric-value">2.4s</div>
+                        <div class="metric-label">Avg. Response</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;">
+                    <i class="fas fa-chart-line"></i> View Detailed Stats
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="admin-content">
+            <!-- Content Header -->
+            <div class="content-header fade-in">
+                <div class="content-title">
+                    <i class="fas fa-users"></i>
+                    <span id="sectionTitle">User Management</span>
+                </div>
+                
+                <div class="content-actions">
+                    <button class="btn btn-secondary" id="refreshAdminBtn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-primary" id="addNewBtn">
+                        <i class="fas fa-plus"></i> Add New
+                    </button>
+                </div>
+            </div>
+
+            <!-- Users Management Section -->
+            <div class="admin-section active" id="usersSection">
+                <div class="users-toolbar">
+                    <div class="users-search">
+                        <i class="fas fa-search users-search-icon"></i>
+                        <input type="text" class="users-search-input" placeholder="Search users...">
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px;">
+                        <select class="setting-control" style="width: 150px;">
+                            <option>Filter by Role</option>
+                            <option>Admin</option>
+                            <option>Staff</option>
+                            <option>Student</option>
+                        </select>
+                        <select class="setting-control" style="width: 150px;">
+                            <option>Filter by Status</option>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                            <option>Suspended</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="users-table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;"></th>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Last Active</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                    <div style="color: var(--medium-gray); font-size: 14px;">
+                        Showing 1-10 of 1,248 users
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-secondary active">1</button>
+                        <button class="btn btn-secondary">2</button>
+                        <button class="btn btn-secondary">3</button>
+                        <button class="btn btn-secondary">4</button>
+                        <button class="btn btn-secondary">5</button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Departments Section -->
+            <div class="admin-section" id="departmentsSection">
+                <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 700;">Department Management</h3>
+                <!-- Department management content -->
+            </div>
+
+            <!-- Categories Section -->
+            <div class="admin-section" id="categoriesSection">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h3 style="font-size: 20px; font-weight: 700;">Complaint Categories</h3>
+                    <button class="btn btn-primary" id="addCategoryBtn">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+                
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Workflow Section -->
+            <div class="admin-section" id="workflowSection">
+                <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 700;">Workflow Configuration</h3>
+                <!-- Workflow configuration content -->
+            </div>
+
+            <!-- SLA Section -->
+            <div class="admin-section" id="slaSection">
+                <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 700;">SLA Configuration</h3>
+                <!-- SLA configuration content -->
+            </div>
+
+            <!-- Settings Section -->
+            <div class="admin-section" id="settingsSection">
+                <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 700;">System Settings</h3>
+                
+                <div class="settings-grid">
+                    <div class="settings-group">
+                        <h4 class="settings-group-title">
+                            <i class="fas fa-bell"></i> Notification Settings
+                        </h4>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Email Notifications</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="setting-description">Send email notifications for updates</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">SMS Notifications</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="setting-description">Send SMS notifications for urgent issues</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Push Notifications</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="setting-description">Send push notifications to mobile apps</div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4 class="settings-group-title">
+                            <i class="fas fa-shield-alt"></i> Security Settings
+                        </h4>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Two-Factor Authentication</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="setting-description">Require 2FA for admin access</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Password Policy</label>
+                            <select class="setting-control">
+                                <option>Strong (Recommended)</option>
+                                <option>Medium</option>
+                                <option>Basic</option>
+                            </select>
+                            <div class="setting-description">Minimum password strength requirement</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Session Timeout</label>
+                            <select class="setting-control">
+                                <option>15 minutes</option>
+                                <option>30 minutes</option>
+                                <option>1 hour (Default)</option>
+                                <option>4 hours</option>
+                            </select>
+                            <div class="setting-description">Automatic logout after inactivity</div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4 class="settings-group-title">
+                            <i class="fas fa-paint-brush"></i> Appearance
+                        </h4>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Theme</label>
+                            <select class="setting-control">
+                                <option>Light (Default)</option>
+                                <option>Dark</option>
+                                <option>Auto</option>
+                            </select>
+                            <div class="setting-description">System-wide color theme</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Language</label>
+                            <select class="setting-control">
+                                <option>English (US)</option>
+                                <option>Amharic</option>
+                                <option>French</option>
+                                <option>Arabic</option>
+                            </select>
+                            <div class="setting-description">Interface language</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Time Zone</label>
+                            <select class="setting-control">
+                                <option>Africa/Addis_Ababa (EAT)</option>
+                                <option>UTC</option>
+                                <option>America/New_York</option>
+                                <option>Europe/London</option>
+                            </select>
+                            <div class="setting-description">System time zone for all users</div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-group">
+                        <h4 class="settings-group-title">
+                            <i class="fas fa-envelope"></i> Email Settings
+                        </h4>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">SMTP Server</label>
+                            <input type="text" class="setting-control" value="smtp.aastu.edu.et">
+                            <div class="setting-description">Outgoing mail server address</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Port</label>
+                            <input type="number" class="setting-control" value="587">
+                            <div class="setting-description">SMTP server port number</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">From Email</label>
+                            <input type="email" class="setting-control" value="noreply@aastu.edu.et">
+                            <div class="setting-description">Default sender email address</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 32px;">
+                    <button class="btn btn-success" style="min-width: 200px;">
+                        <i class="fas fa-save"></i> Save All Settings
+                    </button>
+                </div>
+            </div>
+
+            <!-- Audit Logs Section -->
+            <div class="admin-section" id="auditSection">
+                <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 700;">System Audit Logs</h3>
+                
+                <div class="audit-filters">
+                    <select class="setting-control" style="width: 200px;">
+                        <option>All Actions</option>
+                        <option>User Management</option>
+                        <option>System Settings</option>
+                        <option>Security</option>
+                    </select>
+                    
+                    <input type="date" class="setting-control" style="width: 150px;">
+                    <input type="date" class="setting-control" style="width: 150px;">
+                    
+                    <select class="setting-control" style="width: 150px;">
+                        <option>All Users</option>
+                        <option>Admin User</option>
+                        <option>System</option>
+                    </select>
+                    
+                    <button class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+                
+                <div class="audit-log" id="auditLog">
+                    <!-- Audit logs will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Backup & Restore Section -->
+            <div class="admin-section" id="backupSection">
+                <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 700;">Backup & Restore</h3>
+                
+                <div class="backup-cards">
+                    <div class="backup-card">
+                        <div class="backup-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="backup-info">
+                            <div class="backup-title">Database Backup</div>
+                            <div class="backup-desc">Create a complete backup of the system database</div>
+                        </div>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i> Backup Now
+                        </button>
+                    </div>
+                    
+                    <div class="backup-card">
+                        <div class="backup-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="backup-info">
+                            <div class="backup-title">Restore Database</div>
+                            <div class="backup-desc">Restore system from a previous backup</div>
+                        </div>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-upload"></i> Restore
+                        </button>
+                    </div>
+                    
+                    <div class="backup-card">
+                        <div class="backup-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="backup-info">
+                            <div class="backup-title">Auto Backup</div>
+                            <div class="backup-desc">Configure automatic backup schedule</div>
+                        </div>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-cog"></i> Configure
+                        </button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 32px;">
+                    <h4 style="margin-bottom: 16px;">Recent Backups</h4>
+                    <div class="users-table-container">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Backup Date</th>
+                                    <th>Size</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>April 10, 2024 02:00 AM</td>
+                                    <td>45.2 MB</td>
+                                    <td>Full Backup</td>
+                                    <td><span class="user-role-badge role-staff">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>April 9, 2024 02:00 AM</td>
+                                    <td>44.8 MB</td>
+                                    <td>Full Backup</td>
+                                    <td><span class="user-role-badge role-staff">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Management Section -->
+            <div class="admin-section" id="apiSection">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h3 style="font-size: 20px; font-weight: 700;">API Management</h3>
+                    <button class="btn btn-primary" id="generateApiKeyBtn">
+                        <i class="fas fa-key"></i> Generate API Key
+                    </button>
+                </div>
+                
+                <div class="api-keys" id="apiKeysList">
+                    <!-- API keys will be populated by JavaScript -->
+                </div>
+                
+                <div style="margin-top: 32px;">
+                    <h4 style="margin-bottom: 16px;">API Documentation</h4>
+                    <div style="background: var(--lighter-gray); padding: 24px; border-radius: var(--radius-md);">
+                        <p>API Base URL: <code>https://api.aastu.edu.et/complaints/v1</code></p>
+                        <p style="margin-top: 12px;">For detailed API documentation, please visit:</p>
+                        <a href="#" style="color: var(--primary-blue);">https://docs.aastu.edu.et/complaints-api</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div class="admin-section" id="reportsSection">
+                <h3 style="margin-bottom: 24px; font-size: 20px; font-weight: 700;">System Reports</h3>
+                <!-- Reports content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal-overlay" id="addUserModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New User</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div class="setting-item">
+                        <label class="setting-label">First Name</label>
+                        <input type="text" class="setting-control" id="firstName">
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">Last Name</label>
+                        <input type="text" class="setting-control" id="lastName">
+                    </div>
+                    <div class="setting-item" style="grid-column: 1 / -1;">
+                        <label class="setting-label">Email Address</label>
+                        <input type="email" class="setting-control" id="userEmail" placeholder="user@aastu.edu.et">
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">Role</label>
+                        <select class="setting-control" id="userRole">
+                            <option value="student">Student</option>
+                            <option value="staff">Staff</option>
+                            <option value="department-head">Department Head</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">Department</label>
+                        <select class="setting-control" id="userDepartment">
+                            <option value="">Select Department</option>
+                            <option value="computer-science">Computer Science</option>
+                            <option value="ict">ICT Services</option>
+                            <option value="facilities">Facilities</option>
+                            <option value="academics">Academics</option>
+                        </select>
+                    </div>
+                    <div class="setting-item" style="grid-column: 1 / -1;">
+                        <label class="setting-label">
+                            <input type="checkbox" id="sendWelcomeEmail" checked>
+                            Send welcome email with login instructions
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelAddUserBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveUserBtn">Create User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal-overlay" id="editUserModal">
+        <div class="modal" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit User</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- User edit form will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for Admin Panel
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in and is admin
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (!userData.name || userData.role !== 'admin') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Update admin info
+            document.getElementById('adminName').textContent = userData.name;
+            document.getElementById('adminAvatar').textContent = userData.avatar;
+
+            // Elements
+            const navItems = document.querySelectorAll('.admin-nav-item');
+            const sections = document.querySelectorAll('.admin-section');
+            const sectionTitle = document.getElementById('sectionTitle');
+            const refreshBtn = document.getElementById('refreshAdminBtn');
+            const addNewBtn = document.getElementById('addNewBtn');
+            const addUserModal = document.getElementById('addUserModal');
+            const editUserModal = document.getElementById('editUserModal');
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            const auditLog = document.getElementById('auditLog');
+            const apiKeysList = document.getElementById('apiKeysList');
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            const generateApiKeyBtn = document.getElementById('generateApiKeyBtn');
+
+            // Mock data
+            const users = [
+                { id: 1, name: 'John Doe', email: 'john@aastu.edu.et', role: 'student', department: 'Computer Science', status: 'active', lastActive: '2 hours ago' },
+                { id: 2, name: 'Dr. Alemayehu', email: 'alema@aastu.edu.et', role: 'staff', department: 'ICT Services', status: 'active', lastActive: '5 minutes ago' },
+                { id: 3, name: 'Prof. Solomon', email: 'solomon@aastu.edu.et', role: 'department-head', department: 'Computer Science', status: 'active', lastActive: '1 day ago' },
+                { id: 4, name: 'Admin User', email: 'admin@aastu.edu.et', role: 'admin', department: 'Administration', status: 'active', lastActive: 'Just now' },
+                { id: 5, name: 'Sara Mohamed', email: 'sara@aastu.edu.et', role: 'student', department: 'Business', status: 'inactive', lastActive: '1 week ago' },
+                { id: 6, name: 'Michael Tekle', email: 'michael@aastu.edu.et', role: 'staff', department: 'Facilities', status: 'active', lastActive: '3 hours ago' }
+            ];
+
+            const categories = [
+                { id: 1, name: 'Academics', icon: 'fa-graduation-cap', description: 'Course-related issues, grades, academic policies', color: '#1A56DB', complaints: 45 },
+                { id: 2, name: 'Facilities', icon: 'fa-building', description: 'Building maintenance, equipment, utilities', color: '#10B981', complaints: 30 },
+                { id: 3, name: 'ICT Services', icon: 'fa-laptop', description: 'Network, software, hardware issues', color: '#8B5CF6', complaints: 25 },
+                { id: 4, name: 'Administration', icon: 'fa-file-alt', description: 'Administrative processes and procedures', color: '#F59E0B', complaints: 15 },
+                { id: 5, name: 'Campus Life', icon: 'fa-home', description: 'Dormitory, cafeteria, student activities', color: '#EF4444', complaints: 12 },
+                { id: 6, name: 'Library', icon: 'fa-book', description: 'Library services, resources, facilities', color: '#3B82F6', complaints: 8 }
+            ];
+
+            const auditLogs = [
+                { id: 1, user: 'Admin User', action: 'User created', details: 'Created new user: John Doe', time: '10 minutes ago', icon: 'fa-user-plus', color: '#10B981' },
+                { id: 2, user: 'System', action: 'Backup completed', details: 'Daily database backup completed successfully', time: '2 hours ago', icon: 'fa-database', color: '#3B82F6' },
+                { id: 3, user: 'Dr. Alemayehu', action: 'Settings updated', details: 'Updated notification settings', time: '5 hours ago', icon: 'fa-cog', color: '#F59E0B' },
+                { id: 4, user: 'Admin User', action: 'User suspended', details: 'Suspended user: Sara Mohamed', time: '1 day ago', icon: 'fa-user-slash', color: '#EF4444' },
+                { id: 5, user: 'System', action: 'Security scan', details: 'Completed weekly security scan - No threats found', time: '2 days ago', icon: 'fa-shield-alt', color: '#8B5CF6' }
+            ];
+
+            const apiKeys = [
+                { id: 1, name: 'Mobile App', key: 'cm_sk_live_51Hj...kL9z', created: 'April 1, 2024', lastUsed: 'Today' },
+                { id: 2, name: 'Integration API', key: 'cm_sk_test_4fj...8Gh2', created: 'March 15, 2024', lastUsed: '2 days ago' },
+                { id: 3, name: 'Reporting Tool', key: 'cm_sk_live_7dk...3Pq9', created: 'February 28, 2024', lastUsed: '1 week ago' }
+            ];
+
+            // Initialize data
+            initializeUsersTable();
+            initializeCategories();
+            initializeAuditLogs();
+            initializeApiKeys();
+
+            // Navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const section = this.dataset.section;
+                    
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update section title
+                    const title = this.querySelector('.admin-nav-text').textContent;
+                    sectionTitle.textContent = title;
+                    
+                    // Show selected section
+                    sections.forEach(sec => sec.classList.remove('active'));
+                    document.getElementById(`${section}Section`).classList.add('active');
+                    
+                    // Update URL
+                    history.replaceState(null, null, `?section=${section}`);
+                });
+            });
+
+            // Check URL for section
+            const urlParams = new URLSearchParams(window.location.search);
+            const sectionParam = urlParams.get('section');
+            if (sectionParam) {
+                const navItem = document.querySelector(`.admin-nav-item[data-section="${sectionParam}"]`);
+                if (navItem) navItem.click();
+            }
+
+            // Refresh button
+            refreshBtn.addEventListener('click', function() {
+                this.classList.add('fa-spin');
+                setTimeout(() => {
+                    this.classList.remove('fa-spin');
+                    showNotification('Data refreshed!', 'success');
+                }, 1000);
+            });
+
+            // Add new button
+            addNewBtn.addEventListener('click', function() {
+                const activeSection = document.querySelector('.admin-section.active').id;
+                
+                switch(activeSection) {
+                    case 'usersSection':
+                        addUserModal.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                        break;
+                    case 'categoriesSection':
+                        addCategory();
+                        break;
+                    case 'apiSection':
+                        generateApiKey();
+                        break;
+                    default:
+                        showNotification('Add functionality for this section', 'info');
+                }
+            });
+
+            // Add category button
+            addCategoryBtn.addEventListener('click', addCategory);
+
+            // Generate API key button
+            generateApiKeyBtn.addEventListener('click', generateApiKey);
+
+            // Close modals
+            document.querySelectorAll('.close-modal').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            });
+
+            // Close modals when clicking outside
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            });
+
+            // Save user button
+            document.getElementById('saveUserBtn').addEventListener('click', function() {
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('userEmail').value;
+                const role = document.getElementById('userRole').value;
+                const department = document.getElementById('userDepartment').value;
+                
+                if (!firstName || !lastName || !email) {
+                    showNotification('Please fill in all required fields', 'error');
+                    return;
+                }
+                
+                // Add new user
+                const newUser = {
+                    id: users.length + 1,
+                    name: `${firstName} ${lastName}`,
+                    email: email,
+                    role: role,
+                    department: department,
+                    status: 'active',
+                    lastActive: 'Just now'
+                };
+                
+                users.push(newUser);
+                initializeUsersTable();
+                
+                addUserModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+                
+                showNotification(`User ${firstName} ${lastName} created successfully!`, 'success');
+                
+                // Reset form
+                document.getElementById('firstName').value = '';
+                document.getElementById('lastName').value = '';
+                document.getElementById('userEmail').value = '';
+            });
+
+            // Cancel add user
+            document.getElementById('cancelAddUserBtn').addEventListener('click', function() {
+                addUserModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + R: Refresh
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    refreshBtn.click();
+                }
+                
+                // Ctrl + N: Add new
+                if (e.ctrlKey && e.key === 'n') {
+                    e.preventDefault();
+                    addNewBtn.click();
+                }
+                
+                // Escape: Close modals
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay').forEach(modal => {
+                        if (modal.style.display === 'flex') {
+                            modal.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                        }
+                    });
+                }
+            });
+
+            // Add animation to cards
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Auto-save settings
+            document.querySelectorAll('.setting-control, .toggle-switch input').forEach(element => {
+                element.addEventListener('change', function() {
+                    showNotification('Setting saved!', 'success');
+                });
+            });
+        });
+
+        // Helper functions
+        function initializeUsersTable() {
+            const tableBody = document.getElementById('usersTableBody');
+            tableBody.innerHTML = users.map(user => {
+                const roleClass = `role-${user.role.replace('-', '-')}`;
+                const statusClass = `status-${user.status}`;
+                
+                return `
+                <tr>
+                    <td>
+                        <input type="checkbox">
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 36px; height: 36px; border-radius: 8px; background: var(--primary-blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                ${user.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                            <div>
+                                <div style="font-weight: 600;">${user.name}</div>
+                                <div style="font-size: 12px; color: var(--medium-gray);">ID: ${String(user.id).padStart(6, '0')}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span class="user-role-badge ${roleClass}">
+                            ${user.role.replace('-', ' ')}
+                        </span>
+                    </td>
+                    <td>${user.department}</td>
+                    <td>
+                        <span class="user-status ${statusClass}"></span>
+                        ${user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                    </td>
+                    <td>${user.lastActive}</td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm" onclick="editUser(${user.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="resetPassword(${user.id})">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="toggleUserStatus(${user.id})">
+                                <i class="fas ${user.status === 'active' ? 'fa-user-slash' : 'fa-user-check'}"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        function initializeCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = categories.map(category => `
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon" style="background: ${category.color}">
+                            <i class="fas ${category.icon}"></i>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm" onclick="editCategory(${category.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="deleteCategory(${category.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="category-title">${category.name}</div>
+                    <div class="category-desc">${category.description}</div>
+                    <div class="category-stats">
+                        <span>${category.complaints} complaints</span>
+                        <span>SLA: 48 hours</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function initializeAuditLogs() {
+            const log = document.getElementById('auditLog');
+            log.innerHTML = auditLogs.map(logEntry => `
+                <div class="audit-item">
+                    <div class="audit-icon" style="background: ${logEntry.color}">
+                        <i class="fas ${logEntry.icon}"></i>
+                    </div>
+                    <div class="audit-content">
+                        <div class="audit-action">${logEntry.action}</div>
+                        <div class="audit-details">${logEntry.details}</div>
+                        <div class="audit-meta">
+                            <span>By: ${logEntry.user}</span>
+                            <span>${logEntry.time}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function initializeApiKeys() {
+            const list = document.getElementById('apiKeysList');
+            list.innerHTML = apiKeys.map(apiKey => `
+                <div class="api-key-card">
+                    <div class="api-key-info">
+                        <h4>${apiKey.name}</h4>
+                        <div class="api-key-code">${apiKey.key}</div>
+                        <div style="margin-top: 8px; font-size: 12px; color: var(--medium-gray);">
+                            Created: ${apiKey.created} • Last used: ${apiKey.lastUsed}
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-secondary btn-sm" onclick="copyApiKey('${apiKey.key}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="revokeApiKey(${apiKey.id})">
+                            <i class="fas fa-ban"></i> Revoke
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addCategory() {
+            const newCategory = {
+                id: categories.length + 1,
+                name: 'New Category',
+                icon: 'fa-tag',
+                description: 'Description of the new category',
+                color: '#6B7280',
+                complaints: 0
+            };
+            
+            categories.push(newCategory);
+            initializeCategories();
+            
+            showNotification('New category added!', 'success');
+        }
+
+        function generateApiKey() {
+            const newApiKey = {
+                id: apiKeys.length + 1,
+                name: `API Key ${apiKeys.length + 1}`,
+                key: 'cm_sk_' + Math.random().toString(36).substr(2, 32),
+                created: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+                lastUsed: 'Never'
+            };
+            
+            apiKeys.push(newApiKey);
+            initializeApiKeys();
+            
+            showNotification('New API key generated!', 'success');
+        }
+
+        function editUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            
+            const modal = document.getElementById('editUserModal');
+            modal.querySelector('.modal-body').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div class="setting-item">
+                        <label class="setting-label">Full Name</label>
+                        <input type="text" class="setting-control" value="${user.name}">
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">Email Address</label>
+                        <input type="email" class="setting-control" value="${user.email}">
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">Role</label>
+                        <select class="setting-control">
+                            <option value="student" ${user.role === 'student' ? 'selected' : ''}>Student</option>
+                            <option value="staff" ${user.role === 'staff' ? 'selected' : ''}>Staff</option>
+                            <option value="department-head" ${user.role === 'department-head' ? 'selected' : ''}>Department Head</option>
+                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Administrator</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label class="setting-label">Department</label>
+                        <input type="text" class="setting-control" value="${user.department}">
+                    </div>
+                    <div class="setting-item" style="grid-column: 1 / -1;">
+                        <label class="setting-label">Status</label>
+                        <select class="setting-control">
+                            <option value="active" ${user.status === 'active' ? 'selected' : ''}>Active</option>
+                            <option value="inactive" ${user.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                            <option value="suspended" ${user.status === 'suspended' ? 'selected' : ''}>Suspended</option>
+                        </select>
+                    </div>
+                    <div class="setting-item" style="grid-column: 1 / -1;">
+                        <label class="setting-label">Permissions</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" checked>
+                                <span>View Complaints</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" ${user.role !== 'student' ? 'checked' : ''}>
+                                <span>Edit Complaints</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" ${user.role === 'admin' ? 'checked' : ''}>
+                                <span>Manage Users</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <input type="checkbox" ${user.role === 'admin' ? 'checked' : ''}>
+                                <span>System Settings</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="document.getElementById('editUserModal').style.display='none'">
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary" onclick="saveUserChanges(${userId})">
+                        Save Changes
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function saveUserChanges(userId) {
+            showNotification('User updated successfully!', 'success');
+            document.getElementById('editUserModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function resetPassword(userId) {
+            if (confirm('Reset password for this user?')) {
+                showNotification('Password reset email sent!', 'success');
+            }
+        }
+
+        function toggleUserStatus(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                user.status = user.status === 'active' ? 'inactive' : 'active';
+                initializeUsersTable();
+                showNotification(`User ${user.status === 'active' ? 'activated' : 'deactivated'}!`, 'success');
+            }
+        }
+
+        function editCategory(categoryId) {
+            const category = categories.find(c => c.id === categoryId);
+            if (category) {
+                const newName = prompt('Enter new category name:', category.name);
+                if (newName) {
+                    category.name = newName;
+                    initializeCategories();
+                    showNotification('Category updated!', 'success');
+                }
+            }
+        }
+
+        function deleteCategory(categoryId) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                const index = categories.findIndex(c => c.id === categoryId);
+                if (index > -1) {
+                    categories.splice(index, 1);
+                    initializeCategories();
+                    showNotification('Category deleted!', 'success');
+                }
+            }
+        }
+
+        function copyApiKey(key) {
+            navigator.clipboard.writeText(key).then(() => {
+                showNotification('API key copied to clipboard!', 'success');
+            });
+        }
+
+        function revokeApiKey(keyId) {
+            if (confirm('Are you sure you want to revoke this API key?')) {
+                const index = apiKeys.findIndex(k => k.id === keyId);
+                if (index > -1) {
+                    apiKeys.splice(index, 1);
+                    initializeApiKeys();
+                    showNotification('API key revoked!', 'success');
+                }
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--white);
+                color: var(--dark-gray);
+                padding: 16px 24px;
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            if (type === 'success') notification.style.borderLeft = '4px solid var(--accent-green)';
+            if (type === 'error') notification.style.borderLeft = '4px solid var(--accent-red)';
+            if (type === 'info') notification.style.borderLeft = '4px solid var(--primary-blue)';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+            
+            .btn-sm {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
