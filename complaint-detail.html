@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Details - AASTU Complaint System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS for Complaint Detail Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-blue: #1A56DB;
+            --secondary-blue: #3B82F6;
+            --accent-green: #10B981;
+            --accent-red: #EF4444;
+            --accent-yellow: #F59E0B;
+            --accent-purple: #8B5CF6;
+            --dark-gray: #1F2937;
+            --medium-gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --lighter-gray: #F9FAFB;
+            --white: #FFFFFF;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--lighter-gray);
+            color: var(--dark-gray);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 24px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-3px);
+        }
+
+        .complaint-title-section h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .complaint-id {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 32px;
+        }
+
+        /* Left Column */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Status Card */
+        .status-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .status-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-new { background: rgba(26, 86, 219, 0.1); color: var(--primary-blue); }
+        .status-in-review { background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow); }
+        .status-in-progress { background: rgba(59, 130, 246, 0.1); color: var(--secondary-blue); }
+        .status-resolved { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+        .status-closed { background: rgba(107, 114, 128, 0.1); color: var(--medium-gray); }
+
+        .status-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--light-gray);
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-step.active .step-dot {
+            background: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(26, 86, 219, 0.2);
+        }
+
+        .progress-step.completed .step-dot {
+            background: var(--accent-green);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--medium-gray);
+        }
+
+        .progress-step.active .step-label {
+            color: var(--primary-blue);
+        }
+
+        .progress-step.completed .step-label {
+            color: var(--accent-green);
+        }
+
+        /* Details Card */
+        .details-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .detail-item h4 {
+            font-size: 14px;
+            color: var(--medium-gray);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .detail-item p {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .priority-high { background: rgba(239, 68, 68, 0.1); color: var(--accent-red); }
+        .priority-medium { background: rgba(245, 158, 11, 0.1); color: var(--accent-yellow); }
+        .priority-low { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); }
+
+        /* Timeline */
+        .timeline-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin-top: 20px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--light-gray);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -36px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--primary-blue);
+            z-index: 2;
+        }
+
+        .timeline-item.system .timeline-dot {
+            border-color: var(--accent-purple);
+        }
+
+        .timeline-item.staff .timeline-dot {
+            border-color: var(--accent-green);
+        }
+
+        .timeline-item.student .timeline-dot {
+            border-color: var(--secondary-blue);
+        }
+
+        .timeline-content {
+            background: var(--lighter-gray);
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .timeline-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .timeline-message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--dark-gray);
+        }
+
+        .timeline-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* Comments Section */
+        .comments-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .comment-form {
+            margin-bottom: 24px;
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+            transition: var(--transition);
+            background: var(--lighter-gray);
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+            background: var(--white);
+        }
+
+        .comment-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .comment-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: none;
+            border: none;
+            color: var(--medium-gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .option-btn:hover {
+            background: var(--light-gray);
+            color: var(--primary-blue);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* Right Column */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Assignee Card */
+        .assignee-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .assignee-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .assignee-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 8px 16px rgba(26, 86, 219, 0.2);
+        }
+
+        .assignee-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .assignee-info p {
+            color: var(--medium-gray);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .assignee-contact {
+            display: flex;
+            gap: 12px;
+        }
+
+        .contact-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--light-gray);
+            border: none;
+            color: var(--medium-gray);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Attachments */
+        .attachments-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .attachment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .attachment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--lighter-gray);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .attachment-item:hover {
+            background: var(--light-gray);
+            transform: translateX(4px);
+        }
+
+        .attachment-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .attachment-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .attachment-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .attachment-details p {
+            font-size: 12px;
+            color: var(--medium-gray);
+        }
+
+        .attachment-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Analytics Card */
+        .analytics-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .analytics-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .analytics-item:last-child {
+            border-bottom: none;
+        }
+
+        .analytics-label {
+            font-size: 14px;
+            color: var(--medium-gray);
+        }
+
+        .analytics-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+
+        /* SLA Alert */
+        .sla-alert {
+            background: linear-gradient(135deg, var(--accent-yellow), #FBBF24);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            animation: pulse 2s infinite;
+        }
+
+        .sla-alert h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sla-alert p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .sla-timer {
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        /* Quick Actions */
+        .quick-actions-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .action-btn {
+            padding: 12px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            background: var(--white);
+            color: var(--dark-gray);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .action-btn.danger:hover {
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-column {
+                grid-template-columns: repeat(2, 1fr);
+                display: grid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+            
+            .header-left {
+                justify-content: space-between;
+            }
+            
+            .header-right {
+                justify-content: center;
+            }
+            
+            .complaint-title-section h1 {
+                font-size: 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .main-content {
+                padding: 16px;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .right-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--medium-gray);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-red);
+            background: var(--light-gray);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="complaint-title-section">
+                    <h1>
+                        <span id="complaintTitle">Network Issue in Computer Lab B3</span>
+                        <span class="complaint-id" id="complaintId">#CM-2024-001</span>
+                    </h1>
+                    <p id="complaintCategory">Facilities • Computer Science Department</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-secondary" id="printBtn">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-primary" id="updateStatusBtn">
+                    <i class="fas fa-edit"></i> Update Status
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Left Column -->
+        <div class="left-column">
+            <!-- Status Card -->
+            <div class="status-card fade-in">
+                <div class="status-header">
+                    <div class="status-title">Complaint Status</div>
+                    <div class="status-badge status-in-review" id="statusBadge">In Review</div>
+                </div>
+                
+                <div class="status-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 50%"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="progress-step completed">
+                            <div class="step-dot"></div>
+                            <div class="step-label">Submitted</div>
+                        </div>
+                        <div class="progress-step active">
+                            <div class="step-dot"></div>
+                            <div class="step-label">In Review</div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-dot"></div>
+                            <div class="step-label">In Progress</div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-dot"></div>
+                            <div class="step-label">Resolved</div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-dot"></div>
+                            <div class="step-label">Closed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details Card -->
+            <div class="details-card fade-in">
+                <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Complaint Details</h2>
+                
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <h4>Priority</h4>
+                        <p><span class="priority-badge priority-high" id="priorityBadge">High</span></p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Submitted By</h4>
+                        <p id="submittedBy">John Doe</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Submission Date</h4>
+                        <p id="submissionDate">April 10, 2024</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Last Updated</h4>
+                        <p id="lastUpdated">April 12, 2024</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Location</h4>
+                        <p id="complaintLocation">Computer Lab B3, Building 4</p>
+                    </div>
+                    <div class="detail-item">
+                        <h4>Start Date</h4>
+                        <p id="startDate">April 8, 2024</p>
+                    </div>
+                </div>
+                
+                <div class="detail-item full-width">
+                    <h4>Description</h4>
+                    <p id="complaintDescription" style="line-height: 1.6; margin-top: 8px;">
+                        The internet connectivity in Computer Lab B3 has been unstable since Monday morning. 
+                        This is affecting online classes and project submissions for multiple courses. 
+                        All 25 computers in the lab are unable to maintain stable connections to the university network.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-card fade-in">
+                <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Activity Timeline</h2>
+                
+                <div class="timeline" id="timeline">
+                    <!-- Timeline items will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-card fade-in">
+                <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Add Comment</h2>
+                
+                <div class="comment-form">
+                    <textarea class="comment-input" id="commentInput" 
+                              placeholder="Add a comment or update..."></textarea>
+                    
+                    <div class="comment-actions">
+                        <div class="comment-options">
+                            <button class="option-btn" title="Attach file">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+                            <button class="option-btn" title="Mark as internal note">
+                                <i class="fas fa-eye-slash"></i> Internal
+                            </button>
+                            <button class="option-btn" title="Set status">
+                                <i class="fas fa-flag"></i> Status
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="postCommentBtn">
+                            <i class="fas fa-paper-plane"></i> Post Comment
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="commentsList">
+                    <!-- Comments will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <!-- Assignee Card -->
+            <div class="assignee-card fade-in">
+                <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Assigned Staff</h2>
+                
+                <div class="assignee-header">
+                    <div class="assignee-avatar" id="assigneeAvatar">DA</div>
+                    <div class="assignee-info">
+                        <h3 id="assigneeName">Dr. Alemayehu</h3>
+                        <p id="assigneeRole">ICT Support Manager</p>
+                        <p id="assigneeDept">ICT Services Department</p>
+                    </div>
+                </div>
+                
+                <div class="assignee-contact">
+                    <button class="contact-btn" title="Send email">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                    <button class="contact-btn" title="Send message">
+                        <i class="fas fa-comment"></i>
+                    </button>
+                    <button class="contact-btn" title="View profile">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <button class="contact-btn" title="Reassign">
+                        <i class="fas fa-user-friends"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SLA Alert -->
+            <div class="sla-alert fade-in" id="slaAlert">
+                <h4><i class="fas fa-clock"></i> SLA Deadline Approaching</h4>
+                <p>This complaint must be resolved within:</p>
+                <div class="sla-timer" id="slaTimer">48:15:32</div>
+            </div>
+
+            <!-- Attachments -->
+            <div class="attachments-card fade-in">
+                <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Attachments</h2>
+                
+                <div class="attachment-list" id="attachmentList">
+                    <!-- Attachments will be populated by JavaScript -->
+                </div>
+                
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 16px;" id="uploadMoreBtn">
+                    <i class="fas fa-plus"></i> Upload More Files
+                </button>
+            </div>
+
+            <!-- Analytics -->
+            <div class="analytics-card fade-in">
+                <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Analytics</h2>
+                
+                <div class="analytics-item">
+                    <div class="analytics-label">Time Since Submission</div>
+                    <div class="analytics-value" id="timeSince">2 days</div>
+                </div>
+                <div class="analytics-item">
+                    <div class="analytics-label">Response Time</div>
+                    <div class="analytics-value" id="responseTime">4 hours</div>
+                </div>
+                <div class="analytics-item">
+                    <div class="analytics-label">Updates</div>
+                    <div class="analytics-value" id="updateCount">8</div>
+                </div>
+                <div class="analytics-item">
+                    <div class="analytics-label">Comments</div>
+                    <div class="analytics-value" id="commentCount">5</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions-card fade-in">
+                <h2 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Quick Actions</h2>
+                
+                <div class="action-buttons">
+                    <button class="action-btn" id="escalateBtn">
+                        <i class="fas fa-exclamation-triangle"></i> Escalate
+                    </button>
+                    <button class="action-btn" id="markResolvedBtn">
+                        <i class="fas fa-check-circle"></i> Mark Resolved
+                    </button>
+                    <button class="action-btn" id="requestInfoBtn">
+                        <i class="fas fa-question-circle"></i> Request Info
+                    </button>
+                    <button class="action-btn danger" id="closeComplaintBtn">
+                        <i class="fas fa-times-circle"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Update Complaint Status</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">New Status</label>
+                    <select class="form-select" id="newStatusSelect">
+                        <option value="new">New</option>
+                        <option value="in-review" selected>In Review</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Update Notes</label>
+                    <textarea class="form-textarea" id="statusNotes" rows="4" 
+                              placeholder="Add notes about this status change..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="notifyUser"> Notify the student about this update
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelStatusBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveStatusBtn">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Escalate Modal -->
+    <div class="modal-overlay" id="escalateModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Escalate Complaint</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Escalate To</label>
+                    <select class="form-select" id="escalateToSelect">
+                        <option value="">Select department or person</option>
+                        <option value="department-head">Department Head</option>
+                        <option value="quality-assurance">Quality Assurance Unit</option>
+                        <option value="top-management">Top Management</option>
+                        <option value="specific-person">Specific Person...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Reason for Escalation</label>
+                    <select class="form-select" id="escalationReason">
+                        <option value="">Select reason</option>
+                        <option value="sla-violation">SLA Violation</option>
+                        <option value="complex-issue">Complex Issue</option>
+                        <option value="higher-authority">Requires Higher Authority</option>
+                        <option value="student-request">Student Request</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea class="form-textarea" id="escalationNotes" rows="4" 
+                              placeholder="Explain why this escalation is necessary..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="urgentEscalation" checked> Mark as Urgent
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelEscalationBtn">Cancel</button>
+                <button class="btn btn-primary" id="confirmEscalationBtn">Escalate Complaint</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Info Modal -->
+    <div class="modal-overlay" id="requestInfoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Request Additional Information</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Information Needed</label>
+                    <textarea class="form-textarea" id="infoRequest" rows="4" 
+                              placeholder="Specify what additional information you need from the student..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Deadline for Response</label>
+                    <input type="date" class="form-input" id="responseDeadline" 
+                           value="${new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="remindStudent" checked> Send reminder email 24 hours before deadline
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelInfoRequestBtn">Cancel</button>
+                <button class="btn btn-primary" id="sendInfoRequestBtn">Send Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Styles -->
+    <style media="print">
+        @media print {
+            .header-right, .back-btn, .contact-btn, .action-btn, 
+            .comment-actions, .modal-overlay, .sla-alert {
+                display: none !important;
+            }
+            
+            .header {
+                background: white !important;
+                color: black !important;
+                box-shadow: none !important;
+            }
+            
+            .complaint-id {
+                background: #f0f0f0 !important;
+                color: black !important;
+            }
+            
+            .main-content {
+                display: block !important;
+            }
+            
+            .fade-in {
+                animation: none !important;
+            }
+        }
+    </style>
+
+    <script>
+        // JavaScript for Complaint Detail Page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (!userData.name) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Get complaint ID from sessionStorage or URL
+            let complaintId = sessionStorage.getItem('viewingComplaint') || 'CM-2024-001';
+            
+            // Load complaint data
+            const complaints = JSON.parse(localStorage.getItem('complaints') || '[]');
+            const complaint = complaints.find(c => c.id === complaintId) || getMockComplaintData();
+
+            // Update UI with complaint data
+            document.getElementById('complaintId').textContent = complaintId;
+            document.getElementById('complaintTitle').textContent = complaint.title;
+            document.getElementById('complaintCategory').textContent = 
+                `${complaint.category} • ${complaint.department} Department`;
+            document.getElementById('priorityBadge').textContent = complaint.priority;
+            document.getElementById('submittedBy').textContent = complaint.submittedBy || 'John Doe';
+            document.getElementById('submissionDate').textContent = formatDate(complaint.submittedDate);
+            document.getElementById('lastUpdated').textContent = formatDate(complaint.lastUpdated || complaint.submittedDate);
+            document.getElementById('complaintLocation').textContent = complaint.location;
+            document.getElementById('startDate').textContent = formatDate(complaint.startDate);
+            document.getElementById('complaintDescription').textContent = complaint.description;
+            
+            // Update status
+            updateStatusUI(complaint.status);
+            
+            // Update assignee
+            if (complaint.assignedTo) {
+                document.getElementById('assigneeName').textContent = complaint.assignedTo.name;
+                document.getElementById('assigneeRole').textContent = complaint.assignedTo.role;
+                document.getElementById('assigneeDept').textContent = complaint.assignedTo.department;
+                document.getElementById('assigneeAvatar').textContent = 
+                    complaint.assignedTo.name.split(' ').map(n => n[0]).join('');
+            }
+
+            // Elements
+            const printBtn = document.getElementById('printBtn');
+            const updateStatusBtn = document.getElementById('updateStatusBtn');
+            const postCommentBtn = document.getElementById('postCommentBtn');
+            const commentInput = document.getElementById('commentInput');
+            const uploadMoreBtn = document.getElementById('uploadMoreBtn');
+            const escalateBtn = document.getElementById('escalateBtn');
+            const markResolvedBtn = document.getElementById('markResolvedBtn');
+            const requestInfoBtn = document.getElementById('requestInfoBtn');
+            const closeComplaintBtn = document.getElementById('closeComplaintBtn');
+            
+            // Modal elements
+            const statusModal = document.getElementById('statusModal');
+            const escalateModal = document.getElementById('escalateModal');
+            const requestInfoModal = document.getElementById('requestInfoModal');
+            const closeModalBtns = document.querySelectorAll('.close-modal');
+
+            // Print functionality
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+
+            // Update status button
+            updateStatusBtn.addEventListener('click', function() {
+                statusModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Post comment
+            postCommentBtn.addEventListener('click', function() {
+                const comment = commentInput.value.trim();
+                if (!comment) {
+                    alert('Please enter a comment');
+                    return;
+                }
+
+                addComment(comment, userData);
+                commentInput.value = '';
+            });
+
+            // Upload more files
+            uploadMoreBtn.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.multiple = true;
+                input.accept = '.pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx';
+                input.onchange = function(e) {
+                    // Handle file upload
+                    showNotification('Files uploaded successfully!', 'success');
+                };
+                input.click();
+            });
+
+            // Action buttons
+            escalateBtn.addEventListener('click', function() {
+                escalateModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            markResolvedBtn.addEventListener('click', function() {
+                if (confirm('Mark this complaint as resolved?')) {
+                    updateComplaintStatus('resolved', 'Complaint marked as resolved by staff.');
+                    showNotification('Complaint marked as resolved!', 'success');
+                }
+            });
+
+            requestInfoBtn.addEventListener('click', function() {
+                requestInfoModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeComplaintBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to close this complaint? This action cannot be undone.')) {
+                    updateComplaintStatus('closed', 'Complaint closed by staff.');
+                    showNotification('Complaint closed!', 'success');
+                }
+            });
+
+            // Close modals
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modal = this.closest('.modal-overlay');
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            });
+
+            // Close modals when clicking outside
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            });
+
+            // Modal buttons
+            document.getElementById('cancelStatusBtn').addEventListener('click', function() {
+                statusModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            document.getElementById('saveStatusBtn').addEventListener('click', function() {
+                const newStatus = document.getElementById('newStatusSelect').value;
+                const notes = document.getElementById('statusNotes').value;
+                const notifyUser = document.getElementById('notifyUser').checked;
+                
+                updateComplaintStatus(newStatus, notes);
+                
+                if (notifyUser) {
+                    // Simulate sending notification
+                    showNotification('Status updated and user notified!', 'success');
+                } else {
+                    showNotification('Status updated!', 'success');
+                }
+                
+                statusModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+
+            // Initialize timeline and comments
+            initializeTimeline();
+            initializeComments();
+            initializeAttachments();
+            startSLATimer();
+            updateAnalytics();
+
+            // Add animation to cards
+            const cards = document.querySelectorAll('.fade-in');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl + P: Print
+                if (e.ctrlKey && e.key === 'p') {
+                    e.preventDefault();
+                    window.print();
+                }
+                
+                // Ctrl + Enter: Post comment
+                if (e.ctrlKey && e.key === 'Enter' && commentInput === document.activeElement) {
+                    e.preventDefault();
+                    postCommentBtn.click();
+                }
+                
+                // Escape: Close modals
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-overlay').forEach(modal => {
+                        if (modal.style.display === 'flex') {
+                            modal.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                        }
+                    });
+                }
+            });
+
+            // Auto-save comment draft
+            commentInput.addEventListener('input', function() {
+                localStorage.setItem('commentDraft', this.value);
+            });
+
+            // Load comment draft
+            const commentDraft = localStorage.getItem('commentDraft');
+            if (commentDraft) {
+                commentInput.value = commentDraft;
+            }
+        });
+
+        // Helper functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function updateStatusUI(status) {
+            const statusBadge = document.getElementById('statusBadge');
+            const progressFill = document.getElementById('progressFill');
+            const steps = document.querySelectorAll('.progress-step');
+            
+            // Remove all active/completed classes
+            steps.forEach(step => {
+                step.classList.remove('active', 'completed');
+            });
+            
+            // Update based on status
+            let progressWidth = 0;
+            let activeStep = 0;
+            
+            switch(status) {
+                case 'new':
+                    statusBadge.className = 'status-badge status-new';
+                    statusBadge.textContent = 'New';
+                    progressWidth = 0;
+                    activeStep = 0;
+                    steps[0].classList.add('active');
+                    break;
+                case 'in-review':
+                    statusBadge.className = 'status-badge status-in-review';
+                    statusBadge.textContent = 'In Review';
+                    progressWidth = 25;
+                    activeStep = 1;
+                    steps[0].classList.add('completed');
+                    steps[1].classList.add('active');
+                    break;
+                case 'in-progress':
+                    statusBadge.className = 'status-badge status-in-progress';
+                    statusBadge.textContent = 'In Progress';
+                    progressWidth = 50;
+                    activeStep = 2;
+                    steps[0].classList.add('completed');
+                    steps[1].classList.add('completed');
+                    steps[2].classList.add('active');
+                    break;
+                case 'resolved':
+                    statusBadge.className = 'status-badge status-resolved';
+                    statusBadge.textContent = 'Resolved';
+                    progressWidth = 75;
+                    activeStep = 3;
+                    steps[0].classList.add('completed');
+                    steps[1].classList.add('completed');
+                    steps[2].classList.add('completed');
+                    steps[3].classList.add('active');
+                    break;
+                case 'closed':
+                    statusBadge.className = 'status-badge status-closed';
+                    statusBadge.textContent = 'Closed';
+                    progressWidth = 100;
+                    activeStep = 4;
+                    steps.forEach(step => step.classList.add('completed'));
+                    break;
+            }
+            
+            // Update progress bar
+            progressFill.style.width = `${progressWidth}%`;
+        }
+
+        function initializeTimeline() {
+            const timeline = document.getElementById('timeline');
+            const timelineData = [
+                {
+                    type: 'system',
+                    user: 'System',
+                    avatar: 'SYS',
+                    time: 'April 10, 2024 • 10:30 AM',
+                    message: 'Complaint submitted by student',
+                    color: 'var(--accent-purple)'
+                },
+                {
+                    type: 'staff',
+                    user: 'Dr. Alemayehu',
+                    avatar: 'DA',
+                    time: 'April 11, 2024 • 9:15 AM',
+                    message: 'Complaint assigned for investigation. Initial assessment indicates network infrastructure issue.',
+                    color: 'var(--accent-green)'
+                },
+                {
+                    type: 'student',
+                    user: 'John Doe',
+                    avatar: 'JD',
+                    time: 'April 11, 2024 • 2:45 PM',
+                    message: 'Update: The issue is still ongoing. We have a lab session tomorrow that will be affected.',
+                    color: 'var(--secondary-blue)'
+                },
+                {
+                    type: 'staff',
+                    user: 'ICT Support Team',
+                    avatar: 'ICT',
+                    time: 'April 12, 2024 • 11:20 AM',
+                    message: 'Investigation in progress. Suspected router malfunction. Replacement parts ordered.',
+                    color: 'var(--accent-green)'
+                }
+            ];
+            
+            timeline.innerHTML = timelineData.map(item => `
+                <div class="timeline-item ${item.type}">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-user">
+                                <div class="user-avatar" style="background: ${item.color}">${item.avatar}</div>
+                                <span>${item.user}</span>
+                            </div>
+                            <div class="timeline-time">${item.time}</div>
+                        </div>
+                        <div class="timeline-message">${item.message}</div>
+                        ${item.type === 'student' ? `
+                        <div class="timeline-actions">
+                            <button class="btn btn-secondary btn-sm">
+                                <i class="fas fa-reply"></i> Reply
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function initializeComments() {
+            const commentsList = document.getElementById('commentsList');
+            const comments = [
+                {
+                    user: 'John Doe',
+                    avatar: 'JD',
+                    role: 'Student',
+                    time: '2 hours ago',
+                    message: 'Any updates on this? Our project deadline is approaching.',
+                    internal: false
+                },
+                {
+                    user: 'Dr. Alemayehu',
+                    avatar: 'DA',
+                    role: 'Staff',
+                    time: '1 hour ago',
+                    message: 'The replacement router has arrived. Installation scheduled for tomorrow morning.',
+                    internal: false
+                },
+                {
+                    user: 'Quality Assurance',
+                    avatar: 'QA',
+                    role: 'QA Officer',
+                    time: '30 minutes ago',
+                    message: 'Internal note: This complaint is approaching SLA deadline. Please prioritize.',
+                    internal: true
+                }
+            ];
+            
+            commentsList.innerHTML = comments.map(comment => `
+                <div class="comment-item" style="margin-bottom: 16px; padding: 16px; background: ${comment.internal ? 'rgba(139, 92, 246, 0.1)' : 'var(--lighter-gray)'}; border-radius: var(--radius-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="user-avatar" style="background: ${comment.internal ? 'var(--accent-purple)' : 'var(--primary-blue)'}">${comment.avatar}</div>
+                            <div>
+                                <div style="font-weight: 600;">${comment.user}</div>
+                                <div style="font-size: 12px; color: var(--medium-gray);">${comment.role} • ${comment.time}</div>
+                            </div>
+                        </div>
+                        ${comment.internal ? `
+                        <span style="font-size: 12px; background: var(--accent-purple); color: white; padding: 2px 8px; border-radius: 4px;">Internal</span>
+                        ` : ''}
+                    </div>
+                    <div style="font-size: 14px; line-height: 1.6; color: var(--dark-gray);">${comment.message}</div>
+                </div>
+            `).join('');
+        }
+
+        function initializeAttachments() {
+            const attachmentList = document.getElementById('attachmentList');
+            const attachments = [
+                {
+                    name: 'network_speed_test.pdf',
+                    size: '2.4 MB',
+                    type: 'pdf',
+                    uploaded: 'April 10, 2024'
+                },
+                {
+                    name: 'lab_photo.jpg',
+                    size: '1.8 MB',
+                    type: 'image',
+                    uploaded: 'April 10, 2024'
+                },
+                {
+                    name: 'error_log.txt',
+                    size: '0.8 MB',
+                    type: 'text',
+                    uploaded: 'April 11, 2024'
+                }
+            ];
+            
+            attachmentList.innerHTML = attachments.map(attachment => {
+                const icon = attachment.type === 'pdf' ? 'fa-file-pdf' :
+                            attachment.type === 'image' ? 'fa-file-image' :
+                            attachment.type === 'text' ? 'fa-file-alt' : 'fa-file';
+                const color = attachment.type === 'pdf' ? 'var(--accent-red)' :
+                            attachment.type === 'image' ? 'var(--accent-green)' : 'var(--primary-blue)';
+                
+                return `
+                <div class="attachment-item">
+                    <div class="attachment-info">
+                        <div class="attachment-icon" style="background: ${color}">
+                            <i class="fas ${icon}"></i>
+                        </div>
+                        <div class="attachment-details">
+                            <h4>${attachment.name}</h4>
+                            <p>${attachment.size} • ${attachment.uploaded}</p>
+                        </div>
+                    </div>
+                    <div class="attachment-actions">
+                        <button class="contact-btn" title="Download">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="contact-btn" title="Preview">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function startSLATimer() {
+            const slaTimer = document.getElementById('slaTimer');
+            const deadline = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days from now
+            
+            function updateTimer() {
+                const now = new Date();
+                const diff = deadline - now;
+                
+                if (diff <= 0) {
+                    slaTimer.textContent = '00:00:00';
+                    document.getElementById('slaAlert').innerHTML = `
+                        <h4><i class="fas fa-exclamation-triangle"></i> SLA Violated!</h4>
+                        <p>This complaint has exceeded the resolution deadline.</p>
+                    `;
+                    return;
+                }
+                
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                slaTimer.textContent = 
+                    `${hours.toString().padStart(2, '0')}:` +
+                    `${minutes.toString().padStart(2, '0')}:` +
+                    `${seconds.toString().padStart(2, '0')}`;
+                
+                // Change color based on time remaining
+                if (hours < 24) {
+                    document.getElementById('slaAlert').style.background = 
+                        'linear-gradient(135deg, var(--accent-red), #F87171)';
+                } else if (hours < 48) {
+                    document.getElementById('slaAlert').style.background = 
+                        'linear-gradient(135deg, var(--accent-yellow), #FBBF24)';
+                }
+            }
+            
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        function updateAnalytics() {
+            // Mock analytics data
+            document.getElementById('timeSince').textContent = '2 days';
+            document.getElementById('responseTime').textContent = '4 hours';
+            document.getElementById('updateCount').textContent = '8';
+            document.getElementById('commentCount').textContent = '5';
+        }
+
+        function addComment(comment, userData) {
+            const commentsList = document.getElementById('commentsList');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            }) + ' • ' + now.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            const commentHTML = `
+                <div class="comment-item" style="margin-bottom: 16px; padding: 16px; background: var(--lighter-gray); border-radius: var(--radius-md);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div class="user-avatar">${userData.avatar}</div>
+                            <div>
+                                <div style="font-weight: 600;">${userData.name}</div>
+                                <div style="font-size: 12px; color: var(--medium-gray);">${userData.role} • Just now</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="font-size: 14px; line-height: 1.6; color: var(--dark-gray);">${comment}</div>
+                </div>
+            `;
+            
+            commentsList.insertAdjacentHTML('afterbegin', commentHTML);
+            
+            // Clear draft
+            localStorage.removeItem('commentDraft');
+            
+            // Show notification
+            showNotification('Comment posted!', 'success');
+        }
+
+        function updateComplaintStatus(newStatus, notes) {
+            // Update UI
+            updateStatusUI(newStatus);
+            
+            // Add to timeline
+            const timeline = document.getElementById('timeline');
+            const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            }) + ' • ' + now.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            const timelineItem = `
+                <div class="timeline-item staff">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div class="timeline-user">
+                                <div class="user-avatar">${userData.avatar}</div>
+                                <span>${userData.name}</span>
+                            </div>
+                            <div class="timeline-time">${timeString}</div>
+                        </div>
+                        <div class="timeline-message">
+                            <strong>Status changed to: ${newStatus}</strong><br>
+                            ${notes}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            timeline.insertAdjacentHTML('afterbegin', timelineItem);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--white);
+                color: var(--dark-gray);
+                padding: 16px 24px;
+                border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 10000;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            if (type === 'success') notification.style.borderLeft = '4px solid var(--accent-green)';
+            if (type === 'error') notification.style.borderLeft = '4px solid var(--accent-red)';
+            if (type === 'info') notification.style.borderLeft = '4px solid var(--primary-blue)';
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out forwards';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function getMockComplaintData() {
+            return {
+                id: 'CM-2024-001',
+                title: 'Network Issue in Computer Lab B3',
+                category: 'Facilities',
+                department: 'Computer Science',
+                status: 'in-review',
+                priority: 'high',
+                location: 'Computer Lab B3, Building 4',
+                description: 'The internet connectivity in Computer Lab B3 has been unstable since Monday morning. This is affecting online classes and project submissions for multiple courses. All 25 computers in the lab are unable to maintain stable connections to the university network.',
+                startDate: '2024-04-08',
+                submittedDate: '2024-04-10T10:30:00Z',
+                lastUpdated: '2024-04-12T11:20:00Z',
+                submittedBy: 'John Doe',
+                assignedTo: {
+                    name: 'Dr. Alemayehu',
+                    role: 'ICT Support Manager',
+                    department: 'ICT Services'
+                }
+            };
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes slideOutRight {
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
